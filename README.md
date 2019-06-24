@@ -45,6 +45,7 @@ a. 注册服务
 app.Cron("/task/scan",qtask.Scan) //定时扫描任务
 app.Cron("/task/clear",qtask.Clear(7)) //定时清理任务，删除７天的任务数据
 
+app.MQC("/order/bind",OrderBind) //消息处理任务
 
 ```
 
