@@ -7,9 +7,9 @@
 * １. 创建任务
 
 ```go
-//任务处理逻辑
+//业务逻辑
 
-//创建超时执行任务
+//创建超时任务
 qtask.Create(c,"订单绑定任务",map[string]interface{}{
     "order_no":"8973097380045"
 },3600,"GCR:ORDER:BIND")
@@ -28,7 +28,7 @@ func OrderBind(ctx *context.Context) (r interface{}) {
     qtask.Processing(ctx,ctx.Request.GetInt64("task_id"))
 
 
-    //处理其它逻辑...
+    //处理业务逻辑...
 
 
     //成功处理，结束任务
@@ -37,7 +37,7 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 
 ```
 
-* 3. 配置定时任务
+* 3. 定时任务
 
 a. 注册服务
 
@@ -48,7 +48,7 @@ app.Cron("/task/clear",qtask.Clear(7)) //定时清理任务，删除７天的任
 
 ```
 
-b. 配置定时执行时间
+b. 配置定时执行
 ```sh
 app.Conf.CRON.SetSubConf("task", `{
 		"tasks": [
