@@ -2,9 +2,9 @@
 定时将任务放入消息队列，并提供延时，处理中，完结等，控制任务处理过程。
 
 
-示例:
+#### 示例:
 
-* 1. 创建任务
+###### 1. 创建任务
 
 ```go
 //业务逻辑
@@ -17,7 +17,7 @@ qtask.Create(c,"订单绑定任务",map[string]interface{}{
 ```
 
 
-* 2. 编写MQC服务，该服务处理 `GCR:ORDER:BIND`消息队列数据
+###### 2. 编写MQC服务，该服务处理 `GCR:ORDER:BIND`消息队列数据
 
 ```go
 
@@ -37,7 +37,7 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 
 ```
 
-* 3. 定时任务
+###### 3. 定时任务
 
 a. 注册服务
 
@@ -66,7 +66,7 @@ app.Conf.CRON.SetSubConf("task", `{
 ```
 
 
-其它处理
+###### 4. 其它处理
 
 1. 自定义数据库名，队列名
 ```go
