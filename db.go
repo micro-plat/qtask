@@ -84,3 +84,16 @@ func queryTasks(db db.IDB) (rows db.QueryRows, err error) {
 
 	return rows, nil
 }
+
+//getSQLPath 获取getSQLPath
+func getSQLPath(tp string) (string, error) {
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		return "", fmt.Errorf("未配置环境变量GOPATH")
+	}
+	path := strings.Split(gopath, ";")
+	if len(path) == 0 {
+		return "", fmt.Errorf("环境变量GOPATH配置的路径为空")
+	}
+	return filepath.Join(path[0], "src/github.com/micro-plat/qtask/sql/"+type), nil
+}

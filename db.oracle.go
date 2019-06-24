@@ -4,11 +4,42 @@ package qtask
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/micro-plat/lib4go/db"
 
 	"github.com/micro-plat/lib4go/jsons"
 )
+
+//自定义安装程序
+func CreateDB(c interface{}) error {
+	db, err := getDB(c)
+	if err != nil {
+		return 0, err
+	}
+	path, err := getSQLPath("oracle")
+	if err != nil {
+		return err
+	}
+	sqls, err := s.Conf.GetSQL(path)
+	if err != nil {
+		return err
+	}
+	db, err := c.GetDB()
+	if err != nil {
+		return err
+	}
+	for _, sql := range sqls {
+		if sql != "" {
+			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
+				if !strings.Contains(err.Error(), "ORA-00942") {
+					s.Conf.Log.Errorf("执行SQL失败： %v %s\n", err, q)
+				}
+			}
+		}
+	}
+	return nil
+}
 
 func createTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
 	imap := map[string]interface{}{
@@ -45,22 +76,22 @@ func createTask(db db.IDB, name string, input map[string]interface{}, timeout in
 const sqlGetSEQ = `select #seq.nextval from dual`
 
 const sqlCreateTaskID = `insert into tsk_system_task(task_id,name,next_execute_time,max_execute_time,
-	execute_interval,status,queue_name,msg_content)values(
+	interval,status,queue_name,msg_content)values(
 	@task_id,@name,sysdate+@interval/24/60/60,
 	@interval,20,@queue_name,@content)`
 
-const sqlDelayTask = `update tsk_system_task t set t.next_execute_time= sysdate+t.execute_interval/24/60/60
+const sqlDelayTask = `update tsk_system_task t set t.next_execute_time= sysdate+t.interval/24/60/60
 where t.status in(20,30) and t.task_id=@task_id`
 
-const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=sysdate+t.execute_interval/24/60/60,
-t.status=30,t.count=t.count + 1
+const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=sysdate+t.interval/24/60/60,
+t.status=30,t.count=t.count + 1,t.last_execute_time=sysdate
 where t.status in(20,30) and t.task_id=@task_id`
 
 const sqlFinishTask = `update tsk_system_task t set t.next_execute_time= STR_TO_DATE('2099-12-31', '%Y-%m-%d'),
 t.status=0
 where t.status in(20,30) and t.task_id=@task_id`
 
-const sqlUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= sysdate+t.execute_interval/24/60/60
+const sqlUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= sysdate+t.interval/24/60/60
 where t.status in(20,30) and t.max_execute_time > sysdate`
 
 const sqlQueryWaitProcess = `select queue_name　name,msg_content content from tsk_system_seq t where t.batch_id=@batch_id

@@ -11,7 +11,7 @@ create table tsk_system_task
 		last_execute_time datetime      comment '上次执行时间' ,
 		next_execute_time int  not null    comment '下次执行时间' ,
 		max_execute_time datetime  not null    comment '执行期限' ,
-		execute_interval int  not null    comment '时间间隔' ,
+		interval int  not null    comment '时间间隔' ,
 		count int default 0 not null    comment '执行次数' ,
 		status int  not null    comment '状态' ,
 		batch_id bigint      comment '执行批次号' ,
