@@ -82,3 +82,22 @@ qtask.Config("order_db","rds_queue") //配置数据库名，队列名
 qtask.CreateDB(ctx) //创建数据库结构
 
 ```
+
+
+3. 使用不同的数据库
+   
+使用mysql数据库
+```sh
+ go install
+
+```
+或
+```sh
+ go install -tags "mysql"
+
+```
+使用oracle数据库
+```sh
+ go install -tags "oci" 
+
+```
