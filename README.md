@@ -66,3 +66,19 @@ app.Conf.CRON.SetSubConf("task", `{
 ```
 
 
+其它处理
+
+1. 自定义数据库名，队列名
+```go
+
+qtask.Config("order_db","rds_queue") //配置数据库名，队列名
+
+```
+
+2. 创建数据库表
+   
+```go
+
+qtask.CreateDB(ctx) //创建数据库结构
+
+```
