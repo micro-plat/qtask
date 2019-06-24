@@ -1,0 +1,28 @@
+
+--------------------begin------------------------
+
+[2019/06/24 18:04:11.487831][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/install.dev.go
+[2019/06/24 18:04:11.487862][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/install.prod.go
+[2019/06/24 18:04:11.487886][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/handling.go
+[2019/06/24 18:04:11.487904][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/.gitignore
+[2019/06/24 18:04:11.487984][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/modules/const/sql/sql.go
+[2019/06/24 18:04:11.488023][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/services/server.go
+[2019/06/24 18:04:11.488042][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/main.go
+[2019/06/24 18:04:11.488059][i][0b685d05f] 生成文件: /home/yanglei/work/src/flowserver/init.go
+[2019/06/24 18:04:11.488075][i][0b685d05f] 项目生成完成
+
+---------------------end-------------------------
+
+--------------------begin------------------------
+
+[2019/06/24 18:04:30.75232][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/handling.go
+[2019/06/24 18:04:30.75273][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/.gitignore
+[2019/06/24 18:04:30.75363][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/modules/const/sql/sql.go
+[2019/06/24 18:04:30.75420][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/services/server.go
+[2019/06/24 18:04:30.75448][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/main.go
+[2019/06/24 18:04:30.75497][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/init.go
+[2019/06/24 18:04:30.75530][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/install.dev.go
+[2019/06/24 18:04:30.75562][i][161203da0] 生成文件: /home/yanglei/work/src/github.com/micro-plat/qtask/examples/flowserver/install.prod.go
+[2019/06/24 18:04:30.75579][i][161203da0] 项目生成完成
+
+---------------------end-------------------------
