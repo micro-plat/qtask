@@ -15,17 +15,13 @@ import (
 func CreateDB(c interface{}) error {
 	db, err := getDB(c)
 	if err != nil {
-		return 0, err
+		return err
 	}
 	path, err := getSQLPath("oracle")
 	if err != nil {
 		return err
 	}
-	sqls, err := s.Conf.GetSQL(path)
-	if err != nil {
-		return err
-	}
-	db, err := c.GetDB()
+	sqls, err := getSQL(path)
 	if err != nil {
 		return err
 	}
@@ -33,7 +29,7 @@ func CreateDB(c interface{}) error {
 		if sql != "" {
 			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
 				if !strings.Contains(err.Error(), "ORA-00942") {
-					s.Conf.Log.Errorf("执行SQL失败： %v %s\n", err, q)
+					return fmt.Errorf("执行SQL失败： %v %s\n", err, q)
 				}
 			}
 		}

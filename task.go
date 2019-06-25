@@ -1,10 +1,13 @@
 package qtask
 
 import (
-	"github.com/micro-plat/lib4go/queue"
+	"fmt"
+
 	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
+	"github.com/micro-plat/lib4go/jsons"
+	"github.com/micro-plat/lib4go/queue"
 )
 
 //Create 创建实时任务，将任务信息保存到数据库并发送消息队列
@@ -15,45 +18,46 @@ import (
 //mq: 消息队列名称
 func Create(c interface{}, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
 
-	db,err:=getDB(c)
-	if err!=nil{
-		return 0,err
+	db, err := getDB(c)
+	if err != nil {
+		return 0, err
 	}
+
 	//保存任务
-	taskID,err=saveTask(db, name, input, timeout, mq)	
-	if err!=nil{
-		return 0,err
+	taskID, err = saveTask(db, name, input, timeout, mq)
+	if err != nil {
+		return 0, err
 	}
 
 	//发送到消息队列
-	input["task_id"]=taskID
+	input["task_id"] = taskID
 	buff, err := jsons.Marshal(input)
 	if err != nil {
 		return 0, fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
 	}
-	queue,err:=getQueue(c)
-	if err!=nil{
-		return 0,err
+	queue, err := getQueue(c)
+	if err != nil {
+		return 0, err
 	}
-	return taskID,queue.Push(mq,string(buff))
+	return taskID, queue.Push(mq, string(buff))
 }
 
 //Delay 创建延迟任务，将任务信息保存到数据库，超时后将任务取出放到消息队列
 //调用此函数将延后下次被放入消息队列的时间
 func Delay(c interface{}, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
-	db,err:=getDB(c)
-	if err!=nil{
-		return 0,err
+	db, err := getDB(c)
+	if err != nil {
+		return 0, err
 	}
-	return saveTask(db, name, input, timeout, mq)	
+	return saveTask(db, name, input, timeout, mq)
 }
 
 //Processing 将任务修改为处理中。系统自动延时，并累加任务处理次数
 //任务被正式处理前调用此函数
 //调用后当下次执行时间小于当前时间后会重新放入消息队列进行处理
 func Processing(c interface{}, taskID int64) error {
-	db,err:=getDB(c)
-	if err!=nil{
+	db, err := getDB(c)
+	if err != nil {
 		return err
 	}
 	return processingTask(db, taskID)
@@ -61,35 +65,35 @@ func Processing(c interface{}, taskID int64) error {
 
 //Finish 任务完成
 //任务终结，不再放入消息队列
-func Finish(c interface{},taskID int64) error {
-	db,err:=getDB(c)
-	if err!=nil{
+func Finish(c interface{}, taskID int64) error {
+	db, err := getDB(c)
+	if err != nil {
 		return err
 	}
 	return finishTask(db, taskID)
 }
 
-func getDB(c interface{})(db db.IDB,error){
+func getDB(c interface{}) (db.IDB, error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetRegularDB(dbName),nil
+		return v.GetContainer().GetRegularDB(dbName), nil
 	case component.IContainer:
-		return v.GetRegularDB(dbName),nil
+		return v.GetRegularDB(dbName), nil
 	case db.IDB:
-		return v,nil
+		return v, nil
 	default:
-		return nil,fmt.Errorf("不支持的参数类型")
+		return nil, fmt.Errorf("不支持的参数类型")
 	}
 }
-func getQueue(c interface{})(db queue.IQueue,error){
+func getQueue(c interface{}) (db queue.IQueue, err error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetRegularQueue(queueName),nil
+		return v.GetContainer().GetRegularQueue(queueName), nil
 	case component.IContainer:
-		return v.GetRegularQueue(dbName),nil
+		return v.GetRegularQueue(dbName), nil
 	case queue.IQueue:
-		return v,nil
+		return v, nil
 	default:
-		return nil,fmt.Errorf("不支持的参数类型")
+		return nil, fmt.Errorf("不支持的参数类型")
 	}
 }
