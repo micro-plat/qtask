@@ -1,8 +1,6 @@
-
 package main
 
 import "github.com/micro-plat/hydra/hydra"
-import _ "github.com/go-sql-driver/mysql"
 
 type flowserver struct {
 	*hydra.MicroApp
@@ -13,7 +11,7 @@ func main() {
 		hydra.NewApp(
 			hydra.WithPlatName("github.com"),
 			hydra.WithSystemName("flowserver"),
-			hydra.WithServerTypes("api"),
+			hydra.WithServerTypes("api-cron-mqc"),
 			hydra.WithDebug()),
 	}
 

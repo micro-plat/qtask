@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
 
 	"github.com/micro-plat/lib4go/jsons"
@@ -67,6 +68,52 @@ func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 	return taskID, nil
 }
 
+func queryTasks(db db.IDB) (rows db.QueryRows, err error) {
+	imap := map[string]interface{}{
+		"name": "获取任务列表",
+	}
+
+	//获取任务编号
+	batchID, row, _, _, err := db.Executes(sqlGetSEQ, imap)
+	if err != nil || row != 1 {
+		return nil, fmt.Errorf("获取批次编号失败 %v", err)
+	}
+
+	imap["batch_id"] = batchID
+
+	row, _, _, err = db.Execute(sqlUpdateTask, imap)
+	if err != nil {
+		return nil, fmt.Errorf("修改任务批次失败 %v", err)
+	}
+	if row == 0 {
+		return nil, context.NewError(204, "未查询到待处理任务")
+	}
+	rows, _, _, err = db.Query(sqlQueryWaitProcess, imap)
+	if err != nil {
+		return nil, fmt.Errorf("根据批次查询任务失败 %v", err)
+	}
+
+	return rows, nil
+}
+
+func clearTask(db db.IDB, day int) error {
+	input := map[string]interface{}{
+		"day": day,
+	}
+	rows, _, _, err := db.Execute(sqlClearTask, input)
+	if err != nil {
+		return fmt.Errorf("清理%d天前的任务失败 %v", day, err)
+	}
+	if rows == 0 {
+		return context.NewError(204, "无需清理")
+	}
+	_, _, _, err = db.Execute(sqlClearSEQ, input)
+	if err != nil {
+		return fmt.Errorf("清理%d天前的序列数据失败 %v", day, err)
+	}
+	return nil
+}
+
 //-----------------------SQL-----------------------------------------
 const sqlGetSEQ = `insert into tsk_system_seq (name) values (@name)`
 const sqlCreateTaskID = `insert into tsk_system_task(task_id,name,next_execute_time,max_execute_time,
@@ -91,7 +138,7 @@ where t.status in(20,30) and t.max_execute_time>now()`
 const sqlQueryWaitProcess = `select queue_name　name,msg_content content from tsk_system_seq t where t.batch_id=@batch_id
 and t.next_execute_time>now()`
 
-const sqlClearTask = `delete from tsk_system_seq t 
+const sqlClearTask = `delete from tsk_system_task t 
 where t.create_time < date_add(now(),interval -#day day)`
 
 const sqlClearSEQ = `delete from tsk_system_seq t 

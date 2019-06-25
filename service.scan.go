@@ -23,6 +23,6 @@ func Scan(ctx *context.Context) (r interface{}) {
 			return fmt.Errorf("发送消息(%s)到消息队列(%s)失败:%v", content, qName, err)
 		}
 	}
-	ctx.Log.Info("处理消息:%d条", rows.Len())
+	ctx.Log.Infof("处理消息:%d条", rows.Len())
 	return "success"
 }

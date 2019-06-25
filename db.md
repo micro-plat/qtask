@@ -8,7 +8,7 @@
 | name              | varchar2(32)  |         |  否   |        | 名称                               |
 | create_time       | date          | sysdate |  否   |        | 创建时间                           |
 | last_execute_time | date          |         |  是   |        | 上次执行时间                       |
-| next_execute_time | number(10)    |         |  否   |        | 下次执行时间                       |
+| next_execute_time | date          |         |  否   |        | 下次执行时间                       |
 | max_execute_time  | date          |         |  否   |        | 执行期限(此时间前的任务可以被执行) |
 | interval          | number(10)    |         |  否   |        | 时间间隔,秒数                      |
 | count             | number(10)    |    0    |  否   |        | 执行次数                           |

@@ -17,7 +17,13 @@ func NewPayHandler(container component.IContainer) (u *PayHandler) {
 //Handle .
 func (u *PayHandler) Handle(ctx *context.Context) (r interface{}) {
 	ctx.Log.Info("-------------------订单支付流程-------------------")
-	qtask.Processing(ctx, ctx.Request.GetInt64("task_id"))
-	qtask.Finish(ctx, ctx.Request.GetInt64("task_id"))
+
+	if err := qtask.Processing(ctx, ctx.Request.GetInt64("task_id")); err != nil {
+		return err
+	}
+
+	if err := qtask.Finish(ctx, ctx.Request.GetInt64("task_id")); err != nil {
+		return err
+	}
 	return "success"
 }
