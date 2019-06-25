@@ -50,3 +50,5 @@ create sequence seq_qtask_system_task_batch_id
 	maxvalue 99999999999
 	start with 20000
 	cache 20;
+
+create index IDX_QTASK_INFO_MAX_TIME on TSK_SYSTEM_TASK (MAX_EXECUTE_TIME, STATUS);

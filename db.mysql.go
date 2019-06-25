@@ -121,9 +121,6 @@ const sqlCreateTaskID = `insert into tsk_system_task(task_id,name,next_execute_t
 	@task_id,@name,date_add(now(),interval @interval second),date_add(now(),interval 86400 second),
 	@interval,20,@queue_name,@content)`
 
-const sqlDelayTask = `update tsk_system_task t set t.next_execute_time= date_add(now(),interval t.interval second)
-where t.status in(20,30) and t.task_id=@task_id`
-
 const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=date_add(now(),interval t.interval second),
 t.status=30,t.count=t.count + 1,t.last_execute_time=now()
 where t.status in(20,30) and t.task_id=@task_id`

@@ -137,9 +137,6 @@ values
    @content)
 `
 
-const sqlDelayTask = `update tsk_system_task t set t.next_execute_time= sysdate+t.interval/24/60/60
-where t.status in(20,30) and t.task_id=@task_id`
-
 const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=sysdate+t.interval/24/60/60,
 t.status=30,t.count=t.count + 1,t.last_execute_time=sysdate
 where t.status in(20,30) and t.task_id=@task_id`
