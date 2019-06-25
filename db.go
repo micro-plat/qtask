@@ -12,16 +12,6 @@ import (
 	"github.com/micro-plat/lib4go/db"
 )
 
-func delayTask(db db.IDB, taskID int64) error {
-	imap := map[string]interface{}{
-		"task_id": taskID,
-	}
-	row, _, _, err := db.Execute(sqlDelayTask, imap)
-	if err != nil || row != 1 {
-		return fmt.Errorf("延长下次执行时间(%d)失败 %v", taskID, err)
-	}
-	return nil
-}
 func processingTask(db db.IDB, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,

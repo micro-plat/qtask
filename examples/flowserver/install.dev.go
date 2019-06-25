@@ -23,7 +23,7 @@ func (s *flowserver) install() {
 	//db#//
 	s.Conf.Plat.SetVarConf("db", "db", `{			
 			"provider":"ora",
-			"connString":"ecoupon/ecoupon@orcl136",
+			"connString":"sso/123456@orcl136",
 			"maxOpen":20,
 			"maxIdle":10,
 			"lifeTime":600		
