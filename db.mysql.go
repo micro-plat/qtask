@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/micro-plat/lib4go/db"
+	"github.com/micro-plat/sso/modules/app"
 
 	"github.com/micro-plat/lib4go/jsons"
 )
@@ -41,7 +42,7 @@ func CreateDB(c interface{}) error {
 	return nil
 }
 
-func createTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
+func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
 	imap := map[string]interface{}{
 		"name": name,
 	}

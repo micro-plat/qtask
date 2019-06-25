@@ -9,10 +9,17 @@
 ```go
 //业务逻辑
 
-//创建超时任务
+//创建实时任务，将任务保存到数据库并发送消息队列
 qtask.Create(c,"订单绑定任务",map[string]interface{}{
     "order_no":"8973097380045"
 },3600,"GCR:ORDER:BIND")
+
+
+//创建延时任务，将任务保存到数据库,超时后放入消息队列
+qtask.Delay(c,"订单绑定任务",map[string]interface{}{
+    "order_no":"8973097380045"
+},3600,"GCR:ORDER:BIND")
+
 
 ```
 
