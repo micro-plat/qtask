@@ -29,13 +29,15 @@ func Bind(app *hydra.MicroApp, scanSecond int, dayBefore int) {
 func Scan(ctx *context.Context) (r interface{}) {
 
 	ctx.Log.Info("---------------qtask:任务扫描----------------")
-	ctx.Response.SetPlain()
 	rows, err := queryTasks(ctx.GetContainer().GetRegularDB(dbName))
 	if err != nil {
 		return err
 	}
 	ctx.Log.Info("发送任务到消息队列")
-	queue := ctx.GetContainer().GetRegularQueue(queueName)
+	queue, err := ctx.GetContainer().GetQueue(queueName)
+	if err != nil {
+		return err
+	}
 	for _, row := range rows {
 		qName := row.GetString("queue_name")
 		content := row.GetString("content")
@@ -51,7 +53,11 @@ func Scan(ctx *context.Context) (r interface{}) {
 func Clear(day int) func(ctx *context.Context) (r interface{}) {
 	return func(ctx *context.Context) (r interface{}) {
 		ctx.Log.Infof("---------------qtask:清理%d天前的任务----------------", day)
-		err := clearTask(ctx.GetContainer().GetRegularDB(dbName), day)
+		db, err := ctx.GetContainer().GetDB(dbName)
+		if err != nil {
+			return err
+		}
+		err = clearTask(db, day)
 		if err != nil {
 			return err
 		}
