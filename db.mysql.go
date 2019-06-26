@@ -4,7 +4,6 @@ package qtask
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
@@ -12,30 +11,13 @@ import (
 	"github.com/micro-plat/lib4go/jsons"
 )
 
-//自定义安装程序
+//CreateDB 自定义安装程序
 func CreateDB(c interface{}) error {
-	db, err := getDB(c)
+	xdb, err := getDB(c)
 	if err != nil {
 		return err
 	}
-	path, err := getSQLPath("mysql")
-	if err != nil {
-		return err
-	}
-	sqls, err := getSQL(path)
-	if err != nil {
-		return err
-	}
-	for _, sql := range sqls {
-		if sql != "" {
-			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
-				if !strings.Contains(err.Error(), "1051") && !strings.Contains(err.Error(), "1050") && !strings.Contains(err.Error(), "1061") && !strings.Contains(err.Error(), "1091") {
-					return fmt.Errorf("执行SQL失败： %v %s", err, q)
-				}
-			}
-		}
-	}
-	return nil
+	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/sql/mysql")
 }
 
 func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (taskID int64, err error) {
@@ -51,6 +33,13 @@ func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 
 	//处理任务参数
 	input["task_id"] = taskID
+	imap["batch_id"] = taskID
+
+	_, _, _, err = db.Execute(sqlClearSEQ, imap)
+	if err != nil {
+		return 0, fmt.Errorf("删除序列数据失败 %v", err)
+	}
+
 	buff, err := jsons.Marshal(input)
 	if err != nil {
 		return 0, fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
@@ -78,8 +67,11 @@ func queryTasks(db db.IDB) (rows db.QueryRows, err error) {
 	if err != nil || row != 1 {
 		return nil, fmt.Errorf("获取批次编号失败 %v", err)
 	}
-
 	imap["batch_id"] = batchID
+	_, _, _, err = db.Execute(sqlClearSEQ, imap)
+	if err != nil {
+		return nil, fmt.Errorf("删除序列数据失败 %v", err)
+	}
 
 	row, _, _, err = db.Execute(sqlUpdateTask, imap)
 	if err != nil {
@@ -107,6 +99,7 @@ func clearTask(db db.IDB, day int) error {
 	if rows == 0 {
 		return context.NewError(204, "无需清理")
 	}
+
 	_, _, _, err = db.Execute(sqlClearSEQ, input)
 	if err != nil {
 		return fmt.Errorf("清理%d天前的序列数据失败 %v", day, err)
@@ -157,4 +150,4 @@ const sqlClearTask = `delete from tsk_system_task
 where create_time < date_add(now(),interval -#day day)`
 
 const sqlClearSEQ = `delete from tsk_system_seq
-where create_time < date_add(now(),interval -#day day)`
+where seq_id=@batch_id`

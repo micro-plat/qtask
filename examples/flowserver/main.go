@@ -17,7 +17,6 @@ func main() {
 
 	app.init()
 	app.install()
-	app.handling()
 
 	app.Start()
 }

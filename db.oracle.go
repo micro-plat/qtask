@@ -4,7 +4,6 @@ package qtask
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
@@ -15,28 +14,11 @@ import (
 
 //自定义安装程序
 func CreateDB(c interface{}) error {
-	db, err := getDB(c)
+	xdb, err := getDB(c)
 	if err != nil {
 		return err
 	}
-	path, err := getSQLPath("oracle")
-	if err != nil {
-		return err
-	}
-	sqls, err := getSQL(path)
-	if err != nil {
-		return err
-	}
-	for _, sql := range sqls {
-		if sql != "" {
-			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
-				if !strings.Contains(err.Error(), "ORA-02289") && !strings.Contains(err.Error(), "ORA-00942") {
-					return fmt.Errorf("执行SQL失败： %v %s\n", err, q)
-				}
-			}
-		}
-	}
-	return nil
+	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/sql/mysql")
 }
 
 func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (int64, error) {

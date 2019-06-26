@@ -17,11 +17,10 @@ func (r *flowserver) init() {
 				c.GetLogger().Error(err)
 			}
 		})
-
-		r.Micro("/order/request", order.NewRequestHandler, "*")
-		r.Flow("/order/pay", order.NewPayHandler, "*")
-
 		return nil
 	})
-	qtask.Bind(r.MicroApp, 3)
+
+	r.Micro("/order/request", order.NewRequestHandler, "*")
+	r.Flow("/order/pay", order.NewPayHandler, "*")
+	qtask.Bind(r.MicroApp, 10, 3)
 }

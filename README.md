@@ -36,7 +36,7 @@ qtask.CreateDB(c) //根据数据库配置文件创建
 
 ```go
 
-qtask.Bind(app,3)　//绑定扫描任务和定时删除3天前的任务
+qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务
 
 ```
 
@@ -65,7 +65,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 func OrderBind(ctx *context.Context) (r interface{}) {
     //检查输入参数...
     
-    //将任务修改为正在处理中
+    //将任务修改为处理中
     qtask.Processing(ctx,ctx.Request.GetInt64("task_id"))
 
 
