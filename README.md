@@ -28,7 +28,7 @@
 #### 1. 创建任务表   
 ```go
 
-qtask.CreateDB(c) //根据数据库配置文件创建
+qtask.CreateDB(c) //根据数据库配置文件创建,c为component.IContainer，*context.Context或db.IDB
 
 ```
 
