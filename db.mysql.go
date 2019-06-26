@@ -141,7 +141,7 @@ const sqlUpdateTask = `update tsk_system_task t set
 t.batch_id=@batch_id,
 t.next_execute_time= date_add(now(),interval t.next_interval second)
 where t.status in(20,30) and t.next_execute_time < now() and t.max_execute_time > now()
-limit 200`
+limit 1000`
 
 const sqlQueryWaitProcess = `select t.queue_name,t.msg_content content from tsk_system_task t
  where t.batch_id=@batch_id and t.next_execute_time > now()`
