@@ -18,7 +18,7 @@ func CreateDB(c interface{}) error {
 	if err != nil {
 		return err
 	}
-	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/sql/mysql")
+	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/sql/oracle")
 }
 
 func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (int64, error) {
