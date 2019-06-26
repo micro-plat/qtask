@@ -87,12 +87,7 @@ qtask.Config("order_db","rds_queue") //配置数据库名，队列名
    
 使用mysql数据库
 ```sh
- go install
-
-```
-或
-```sh
- go install -tags "mysql"
+ go install 或 go install -tags "mysql"
 
 ```
 使用oracle数据库
