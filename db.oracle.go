@@ -24,7 +24,6 @@ func CreateDB(c interface{}) error {
 func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string) (int64, error) {
 	imap := map[string]interface{}{
 		"name": name,
-		"seq":  taskSeqName,
 	}
 
 	//获取任务编号
@@ -55,7 +54,6 @@ func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 func queryTasks(db db.IDB) (rows db.QueryRows, err error) {
 	imap := map[string]interface{}{
 		"name": "获取任务列表",
-		"seq":  taskSeqName,
 	}
 
 	//获取任务编号
