@@ -130,7 +130,7 @@ values
   (@task_id,
    @name,
    sysdate + #next_interval / 24 / 60 / 60,
-   sysdate+1,
+   sysdate+3,
    @next_interval,
    20,
    @queue_name,

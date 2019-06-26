@@ -130,7 +130,7 @@ values
   (@task_id,
    @name,
    date_add(now(),interval @next_interval second),
-   date_add(now(),interval 1 day),
+   date_add(now(),interval 3 day),
    @next_interval,
    20,
    @queue_name,
