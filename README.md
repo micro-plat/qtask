@@ -28,7 +28,7 @@
 #### 1. 创建任务表   
 ```go
 
-qtask.CreateDB(c) //根据数据库配置文件创建,c为component.IContainer，*context.Context或db.IDB
+qtask.CreateDB(c) //根据数据库配置文件创建,c:component.IContainer，*context.Context或db.IDB
 
 ```
 
@@ -36,7 +36,7 @@ qtask.CreateDB(c) //根据数据库配置文件创建,c为component.IContainer�
 
 ```go
 
-qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务
+qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务,app为*hydra.MicroApp
 
 ```
 
