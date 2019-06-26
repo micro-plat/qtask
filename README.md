@@ -8,7 +8,7 @@
 √　实时任务
 √　延时任务
 √　自动重发
-√　DB存储
+√　DB存储,支持mysql,oracle
 √　过期清理
 
 
@@ -16,7 +16,24 @@
 
 ## 示例:
 
-#### 1. 创建任务
+#### 1. 安装数据库表   
+```go
+
+qtask.CreateDB(c) //创建数据库结构
+
+```
+
+#### 2. 绑定服务
+
+a. 注册服务
+
+```go
+
+qtask.Bind(app,3)　//绑定扫描任务和定时删除过期任务3天前的任务
+
+```
+
+#### 3. 创建任务
 
 ```go
 //业务逻辑
@@ -34,7 +51,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ```
 
 
-#### 2. 编写MQC服务，该服务处理 `GCR:ORDER:BIND`消息队列数据
+#### 4. 编写MQC服务，该服务处理 `GCR:ORDER:BIND`消息队列数据
 
 ```go
 
@@ -54,19 +71,8 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 
 ```
 
-#### 3. 定时任务
 
-a. 注册服务
-
-```go
-
-app.MQC("/order/bind",OrderBind) //消息处理任务
-
-qtask.Bind(app,3)　//绑定扫描任务和定时删除过期任务
-
-```
-
-#### 4. 其它处理
+#### 5. 其它
 
 1. 自定义数据库名，队列名
 ```go
@@ -75,16 +81,7 @@ qtask.Config("order_db","rds_queue") //配置数据库名，队列名
 
 ```
 
-2. 创建数据库表
-   
-```go
-
-qtask.CreateDB(ctx) //创建数据库结构
-
-```
-
-
-3. 使用不同的数据库
+2. 使用不同的数据库
    
 使用mysql数据库
 ```sh
