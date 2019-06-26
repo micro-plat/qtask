@@ -32,7 +32,7 @@
 #### 1. 创建任务表   
 ```go
 app.Initializing(func(c component.IContainer) error {
-    qtask.CreateDB(c) //测试环境首次运行时调用，系统初始化后调用。app:*hydra.MicroApp
+    qtask.CreateDB(c) //测试环境首次运行时调用。app:*hydra.MicroApp
 }
 ```
 
