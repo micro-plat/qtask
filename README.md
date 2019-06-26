@@ -29,11 +29,9 @@ qtask.CreateDB(c) //创建数据库结构
 
 #### 2. 绑定服务
 
-a. 注册服务
-
 ```go
 
-qtask.Bind(app,3)　//绑定扫描任务和定时删除过期任务3天前的任务
+qtask.Bind(app,3)　//绑定扫描任务和定时删除3天前的任务
 
 ```
 
@@ -55,7 +53,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ```
 
 
-#### 4. 编写MQC服务，该服务处理 `GCR:ORDER:BIND`消息队列数据
+#### 4. 编写MQC服务，处理 `GCR:ORDER:BIND`消息队列数据
 
 ```go
 
@@ -102,3 +100,6 @@ qtask.Config("order_db","rds_queue") //配置数据库名，队列名
  go install -tags "oci" 
 
 ```
+
+
+[完整示例](https://github.com/micro-plat/qtask/tree/master/examples/flowserver)
