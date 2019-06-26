@@ -45,13 +45,13 @@ qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前�
 ```go
 //业务逻辑
 
-//创建实时任务，将任务保存到数据库并发送消息队列
+//创建实时任务，将任务保存到数据库(状态为等待处理)并放入消息队列
 qtask.Create(c,"订单绑定任务",map[string]interface{}{
     "order_no":"8973097380045"
 },3600,"GCR:ORDER:BIND")
 
 
-//创建延时任务，将任务保存到数据库,超时后放入消息队列
+//创建延时任务，将任务保存到数据库(状态为等待处理),超时后放入消息队列
 qtask.Delay(c,"订单绑定任务",map[string]interface{}{
     "order_no":"8973097380045"
 },3600,"GCR:ORDER:BIND")
@@ -65,14 +65,14 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 func OrderBind(ctx *context.Context) (r interface{}) {
     //检查输入参数...
     
-    //将任务修改为处理中
+    //业务处理前调用，修改任务状态为处理中(超时前未调用qtask.Finish，任务会被重新放入队列)
     qtask.Processing(ctx,ctx.Request.GetInt64("task_id"))
 
 
     //处理业务逻辑...
 
 
-    //成功处理，结束任务
+    //业务处理成功，修改任务状态为完成(任务不再放入队列)
     qtask.Finish(ctx,ctx.Request.GetInt64("task_id"))
 }
 
