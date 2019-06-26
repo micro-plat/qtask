@@ -58,7 +58,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ```
 
 
-#### 4. 编写MQC服务，处理 `GCR:ORDER:BIND`消息队列数据
+#### 4. 处理 `GCR:ORDER:BIND`消息
 
 ```go
 
