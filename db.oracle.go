@@ -30,7 +30,7 @@ func CreateDB(c interface{}) error {
 	for _, sql := range sqls {
 		if sql != "" {
 			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
-				if !strings.Contains(err.Error(), "ORA-00942") {
+				if !strings.Contains(err.Error(), "ORA-02289") && !strings.Contains(err.Error(), "ORA-00942") {
 					return fmt.Errorf("执行SQL失败： %v %s\n", err, q)
 				}
 			}
@@ -59,7 +59,7 @@ func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 	}
 	imap["content"] = string(buff)
 	imap["task_id"] = taskID
-	imap["interval"] = timeout
+	imap["next_interval"] = timeout
 	imap["queue_name"] = mq
 
 	//保存任务信息
@@ -122,22 +122,22 @@ const sqlCreateTaskID = `insert into tsk_system_task
    name,
    next_execute_time,
    max_execute_time,
-   interval,
+   next_interval,
    status,
    queue_name,
    msg_content)
 values
   (@task_id,
    @name,
-   sysdate + #interval / 24 / 60 / 60,
+   sysdate + #next_interval / 24 / 60 / 60,
    sysdate+1,
-   @interval,
+   @next_interval,
    20,
    @queue_name,
    @content)
 `
 
-const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=sysdate+t.interval/24/60/60,
+const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=sysdate+t.next_interval/24/60/60,
 t.status=30,t.count=t.count + 1,t.last_execute_time=sysdate
 where t.status in(20,30) and t.task_id=@task_id`
 
@@ -145,10 +145,11 @@ const sqlFinishTask = `update tsk_system_task t set t.next_execute_time= to_date
 t.status=0
 where t.status in(20,30) and t.task_id=@task_id`
 
-const sqlUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= sysdate+t.interval/24/60/60
-where t.status in(20,30) and t.max_execute_time > sysdate`
+const sqlUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= sysdate+t.next_interval/24/60/60
+where t.status in(20,30) and t.next_execute_time <= sysdate and t.max_execute_time > sysdate 
+and rownum<=200`
 
-const sqlQueryWaitProcess = `select queue_name　name,msg_content content from tsk_system_task t where t.batch_id=@batch_id
+const sqlQueryWaitProcess = `select queue_name,msg_content content from tsk_system_task t where t.batch_id=@batch_id
 and t.next_execute_time > sysdate`
 
 const sqlClearTask = `delete from tsk_system_task t 

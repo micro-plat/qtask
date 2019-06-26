@@ -59,29 +59,12 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 a. 注册服务
 
 ```go
-app.Cron("/task/scan",qtask.Scan) //定时扫描任务
-app.Cron("/task/clear",qtask.Clear(7)) //定时清理任务，删除７天的任务数据
 
 app.MQC("/order/bind",OrderBind) //消息处理任务
 
-```
+qtask.Bind(app,3)　//绑定扫描任务和定时删除过期任务
 
-b. 配置定时执行
-```sh
-app.Conf.CRON.SetSubConf("task", `{
-		"tasks": [
-			{
-				"cron": "@every 10s",
-				"service": "/task/scan"
-			},
-			{
-				"cron": "@every 10s",
-				"service": "/task/clear"
-			}
-        ]
-    }`)
 ```
-
 
 #### 4. 其它处理
 

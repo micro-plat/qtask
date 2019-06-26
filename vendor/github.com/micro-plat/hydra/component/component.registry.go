@@ -29,8 +29,8 @@ type IComponentHandler interface {
 	GetInitializings() []ComponentFunc
 	GetClosings() []ComponentFunc
 	GetTags(name string) []string
-	SetMQCDynamicQueue(c chan *conf.Queue)
-	GetMQCDynamicQueue() (bool, chan *conf.Queue)
+	GetDynamicQueue() chan *conf.Queue
+	GetDynamicCron() chan *conf.Task
 	GetRPCTLS() map[string][]string
 	//GetBalancer 获取负载均衡模式
 	GetBalancer() map[string]*rpc.BalancerMode
@@ -95,14 +95,11 @@ type IServiceRegistry interface {
 	//Initializing 初始化
 	Initializing(c func(IContainer) error)
 
-	//SetMQCDynamicQueue 设置动态队列注册消息
-	SetMQCDynamicQueue(c chan *conf.Queue)
+	//GetDynamicQueue 获取动态队列注册消息
+	GetDynamicQueue() chan *conf.Queue
 
-	//GetMQCDynamicQueue 获取动态队列注册消息
-	GetMQCDynamicQueue() (bool, chan *conf.Queue)
-
-	//GetOrSetMQCDynamicQueue　获取或设置动态队列
-	GetOrSetMQCDynamicQueue(c chan *conf.Queue) chan *conf.Queue
+	//GetDynamicCron 获取动态任务
+	GetDynamicCron() chan *conf.Task
 
 	//Closing 关闭组件
 	Closing(c func(IContainer) error)
@@ -135,6 +132,8 @@ type ServiceRegistry struct {
 	tags              map[string][]string
 	tls               map[string][]string
 	rpcBalancers      map[string]*rpc.BalancerMode
+	dynamicQueues     chan *conf.Queue
+	dynamicCrons      chan *conf.Task
 }
 
 //NewServiceRegistry 创建ServiceRegistry
@@ -148,6 +147,8 @@ func NewServiceRegistry() *ServiceRegistry {
 		exts:              make(map[string]interface{}),
 		tags:              make(map[string][]string),
 		rpcBalancers:      make(map[string]*rpc.BalancerMode),
+		dynamicQueues:     make(chan *conf.Queue, 10),
+		dynamicCrons:      make(chan *conf.Task, 10),
 	}
 }
 
@@ -409,30 +410,14 @@ func (s *ServiceRegistry) Closing(c func(c IContainer) error) {
 	s.closingFuncs = append(s.closingFuncs, c)
 }
 
-//GetMQCDynamicQueue 动态队列注册消息
-func (s *ServiceRegistry) GetMQCDynamicQueue() (bool, chan *conf.Queue) {
-	f, b := s.exts["_mqc_dynamic_queue_notify_func_"]
-	if !b {
-		return false, nil
-	}
-	c, b := f.(chan *conf.Queue)
-	return b, c
+//GetDynamicQueue 获取动态队列
+func (s *ServiceRegistry) GetDynamicQueue() chan *conf.Queue {
+	return s.dynamicQueues
 }
 
-//SetMQCDynamicQueue 动态队列注册消息
-func (s *ServiceRegistry) SetMQCDynamicQueue(c chan *conf.Queue) {
-	s.exts["_mqc_dynamic_queue_notify_func_"] = c
-}
-
-//GetOrSetMQCDynamicQueue 获取或设置动态队列
-func (s *ServiceRegistry) GetOrSetMQCDynamicQueue(c chan *conf.Queue) chan *conf.Queue {
-	e, c := s.GetMQCDynamicQueue()
-	if e {
-		return c
-	}
-	s.SetMQCDynamicQueue(c)
-	return c
-
+//GetDynamicCron 获取动态cron
+func (s *ServiceRegistry) GetDynamicCron() chan *conf.Task {
+	return s.dynamicCrons
 }
 
 //Ext 注册扩展

@@ -29,7 +29,7 @@ func CreateDB(c interface{}) error {
 	for _, sql := range sqls {
 		if sql != "" {
 			if _, q, _, err := db.Execute(sql, map[string]interface{}{}); err != nil {
-				if !strings.Contains(err.Error(), "1050") && !strings.Contains(err.Error(), "1061") && !strings.Contains(err.Error(), "1091") {
+				if !strings.Contains(err.Error(), "1051") && !strings.Contains(err.Error(), "1050") && !strings.Contains(err.Error(), "1061") && !strings.Contains(err.Error(), "1091") {
 					return fmt.Errorf("执行SQL失败： %v %s", err, q)
 				}
 			}
@@ -57,7 +57,7 @@ func saveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 	}
 	imap["content"] = string(buff)
 	imap["task_id"] = taskID
-	imap["interval"] = timeout
+	imap["next_interval"] = timeout
 	imap["queue_name"] = mq
 
 	//保存任务信息
@@ -116,12 +116,27 @@ func clearTask(db db.IDB, day int) error {
 
 //-----------------------SQL-----------------------------------------
 const sqlGetSEQ = `insert into tsk_system_seq (name) values (@name)`
-const sqlCreateTaskID = `insert into tsk_system_task(task_id,name,next_execute_time,max_execute_time,
-	interval,status,queue_name,msg_content)values(
-	@task_id,@name,date_add(now(),interval @interval second),date_add(now(),interval 86400 second),
-	@interval,20,@queue_name,@content)`
 
-const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=date_add(now(),interval t.interval second),
+const sqlCreateTaskID = `insert into tsk_system_task
+  (task_id,
+   name,
+   next_execute_time,
+   max_execute_time,
+   next_interval,
+   status,
+   queue_name,
+   msg_content)
+values
+  (@task_id,
+   @name,
+   date_add(now(),interval @next_interval second),
+   date_add(now(),interval 1 day),
+   @next_interval,
+   20,
+   @queue_name,
+   @content)`
+
+const sqlProcessingTask = `update tsk_system_task t set t.next_execute_time=date_add(now(),interval t.next_interval second),
 t.status=30,t.count=t.count + 1,t.last_execute_time=now()
 where t.status in(20,30) and t.task_id=@task_id`
 
@@ -129,14 +144,17 @@ const sqlFinishTask = `update tsk_system_task t set t.next_execute_time= STR_TO_
 t.status=0
 where t.status in(20,30) and t.task_id=@task_id`
 
-const sqlUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= date_add(now(),interval t.interval second)
-where t.status in(20,30) and t.max_execute_time>now()`
+const sqlUpdateTask = `update tsk_system_task t set 
+t.batch_id=@batch_id,
+t.next_execute_time= date_add(now(),interval t.next_interval second)
+where t.status in(20,30) and t.next_execute_time < now() and t.max_execute_time > now()
+limit 200`
 
-const sqlQueryWaitProcess = `select queue_name　name,msg_content content from tsk_system_seq t where t.batch_id=@batch_id
-and t.next_execute_time>now()`
+const sqlQueryWaitProcess = `select t.queue_name,t.msg_content content from tsk_system_task t
+ where t.batch_id=@batch_id and t.next_execute_time > now()`
 
-const sqlClearTask = `delete from tsk_system_task t 
-where t.create_time < date_add(now(),interval -#day day)`
+const sqlClearTask = `delete from tsk_system_task
+where create_time < date_add(now(),interval -#day day)`
 
-const sqlClearSEQ = `delete from tsk_system_seq t 
-where t.create_time < date_add(now(),interval -#day day)`
+const sqlClearSEQ = `delete from tsk_system_seq
+where create_time < date_add(now(),interval -#day day)`

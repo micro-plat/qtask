@@ -10,6 +10,7 @@ import (
 func Scan(ctx *context.Context) (r interface{}) {
 
 	ctx.Log.Info("---------------qtask:任务扫描----------------")
+	ctx.Response.SetPlain()
 	rows, err := queryTasks(ctx.GetContainer().GetRegularDB(dbName))
 	if err != nil {
 		return err
@@ -17,7 +18,7 @@ func Scan(ctx *context.Context) (r interface{}) {
 	ctx.Log.Info("发送任务到消息队列")
 	queue := ctx.GetContainer().GetRegularQueue(queueName)
 	for _, row := range rows {
-		qName := row.GetString("name")
+		qName := row.GetString("queue_name")
 		content := row.GetString("content")
 		if err := queue.Push(qName, content); err != nil {
 			return fmt.Errorf("发送消息(%s)到消息队列(%s)失败:%v", content, qName, err)

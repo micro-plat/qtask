@@ -10,7 +10,7 @@
 | last_execute_time | date          |         |  是   |        | 上次执行时间                       |
 | next_execute_time | date          |         |  否   |        | 下次执行时间                       |
 | max_execute_time  | date          |         |  否   |        | 执行期限(此时间前的任务可以被执行) |
-| interval          | number(10)    |         |  否   |        | 时间间隔,秒数                      |
+| next_interval     | number(10)    |         |  否   |        | 时间间隔,秒数                      |
 | count             | number(10)    |    0    |  否   |        | 执行次数                           |
 | status            | number(2)     |         |  否   |        | 状态(20等待，30正在,0已处理)       |
 | batch_id          | number(20)    |         |  是   |        | 执行批次号                         |
