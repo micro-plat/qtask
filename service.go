@@ -29,7 +29,11 @@ func Bind(app *hydra.MicroApp, scanSecond int, dayBefore int) {
 func Scan(ctx *context.Context) (r interface{}) {
 
 	ctx.Log.Info("---------------qtask:任务扫描----------------")
-	rows, err := queryTasks(ctx.GetContainer().GetRegularDB(dbName))
+	db, err := ctx.GetContainer().GetDB(dbName)
+	if err != nil {
+		return err
+	}
+	rows, err := queryTasks(db)
 	if err != nil {
 		return err
 	}
