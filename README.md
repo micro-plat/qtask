@@ -36,7 +36,7 @@ qtask.CreateDB(c) //根据数据库配置文件创建,c:component.IContainer，*
 
 ```go
 
-qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务,app为*hydra.MicroApp
+qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务,app:*hydra.MicroApp
 
 ```
 

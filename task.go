@@ -61,6 +61,7 @@ func Processing(c interface{}, taskID int64) error {
 		return err
 	}
 	return processingTask(db, taskID)
+
 }
 
 //Finish 任务完成

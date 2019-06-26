@@ -2,7 +2,6 @@ package cron
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 	"time"
 
@@ -97,9 +96,9 @@ func (s *Processor) handle(task iCronTask) error {
 	}
 	_, _, err := s.Add(task, false)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	return err
+	return nil
 
 }
 func (s *Processor) Remove(name string) {
@@ -136,7 +135,10 @@ func (s *Processor) Add(task iCronTask, r bool) (offset int, round int, err erro
 	task.SetRound(round)
 	s.slots[offset].Set(utility.GetGUID(), task)
 	if r {
-		s.Dispatcher.Handle(task.GetMethod(), task.GetService(), task.GetHandler().(dispatcher.HandlerFunc))
+		if !s.Dispatcher.Find(task.GetService()) {
+			s.Dispatcher.Handle(task.GetMethod(), task.GetService(), task.GetHandler().(dispatcher.HandlerFunc))
+		}
+
 	}
 	return
 }
