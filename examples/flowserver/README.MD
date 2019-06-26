@@ -28,10 +28,10 @@
 
 ### 4. 创建立即执行任务
 ```sh
- curl  http://192.168.4.121:9090/order/request/
+ curl  http://localhost:9090/order/request/
 ```
 
 ### 5. 创建延迟执行任务
 ```sh
- curl  http://192.168.4.121:9090/order/request/delay
+ curl  http://localhost:9090/order/request/delay
 ```
