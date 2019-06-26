@@ -65,7 +65,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 func OrderBind(ctx *context.Context) (r interface{}) {
     //检查输入参数...
     
-    //将任务修改为正在处理中,可以不调用
+    //将任务修改为正在处理中
     qtask.Processing(ctx,ctx.Request.GetInt64("task_id"))
 
 
