@@ -33,5 +33,5 @@
 
 ### 5. 创建延迟执行任务
 ```sh
- curl  http://192.168.4.121:9090/order/request/
+ curl  http://192.168.4.121:9090/order/request/delay
 ```
