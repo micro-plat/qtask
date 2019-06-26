@@ -20,23 +20,8 @@ func (r *flowserver) init() {
 		return nil
 	})
 
-	r.Micro("/order/request", order.NewRequestHandler, "*")
-	r.Flow("/order/pay", order.NewPayHandler, "*")
-
-	// r.Micro("/order/cancel", func(ctx *context.Context) (x interface{}) {
-	// 	ch := r.GetDynamicCron()
-	// 	ch <- &conf.Task{Disable: true, Service: "/task/scan"}
-	// 	r.GetDynamicQueue() <- &conf.Queue{Queue: "QTASK:TEST:ORDER-PAY", Service: "/order/pay", Disable: true}
-	// 	return "success"
-	// })
-	// r.Micro("/order/consume", func(ctx *context.Context) (x interface{}) {
-	// 	ch := r.GetDynamicCron()
-	// 	ch <- &conf.Task{Cron: fmt.Sprintf("@every %ds", 10), Service: "/task/scan"}
-	// 	r.GetDynamicQueue() <- &conf.Queue{Queue: "QTASK:TEST:ORDER-PAY", Service: "/order/pay"}
-	// 	return "success"
-	// })
-
-	// r.GetDynamicQueue() <- &conf.Queue{Queue: "QTASK:TEST:ORDER-PAY", Service: "/order/pay"}
+	r.Micro("/order/request", order.NewRequestHandler)
+	r.Flow("/order/pay", order.NewPayHandler)
 
 	qtask.Bind(r.MicroApp, 10, 3)
 }
