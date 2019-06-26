@@ -29,7 +29,7 @@
 #### 1. 创建任务表   
 ```go
 
-qtask.CreateDB(c) //根据数据库配置文件创建,c:component.IContainer，*context.Context或db.IDB
+qtask.CreateDB(c) //测试环境首次运行时使用，c:component.IContainer，*context.Context或db.IDB
 
 ```
 
