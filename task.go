@@ -77,9 +77,9 @@ func Finish(c interface{}, taskID int64) error {
 func getDB(c interface{}) (db.IDB, error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetRegularDB(dbName), nil
+		return v.GetContainer().GetDB(dbName)
 	case component.IContainer:
-		return v.GetRegularDB(dbName), nil
+		return v.GetDB(dbName)
 	case db.IDB:
 		return v, nil
 	default:
@@ -89,9 +89,9 @@ func getDB(c interface{}) (db.IDB, error) {
 func getQueue(c interface{}) (db queue.IQueue, err error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetRegularQueue(queueName), nil
+		return v.GetContainer().GetQueue(queueName)
 	case component.IContainer:
-		return v.GetRegularQueue(dbName), nil
+		return v.GetQueue(dbName)
 	case queue.IQueue:
 		return v, nil
 	default:
