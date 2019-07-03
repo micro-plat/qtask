@@ -40,7 +40,7 @@ app.Initializing(func(c component.IContainer) error {
 
 ```go
 app.Initializing(func(c component.IContainer) error {
-    qtask.Bind(app,10,3)　//每隔10秒将超时任务放入队列，删除3天前的任务,app:*hydra.MicroApp
+    qtask.Bind(app,10,3)　//每隔10秒将未完成的任务放入队列，删除3天前的任务,app:*hydra.MicroApp
 }
 
 
