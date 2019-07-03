@@ -4,8 +4,8 @@ import (
 	"sync"
 
 	"github.com/micro-plat/hydra/component"
-	"github.com/micro-plat/qtask"
 	"github.com/micro-plat/qtask/examples/flowserver/services/order"
+	"github.com/micro-plat/qtask/qtask"
 )
 
 //init 检查应用程序配置文件，并根据配置初始化服务

@@ -30,10 +30,12 @@
 
 
 #### 1. 创建任务表   
-```go
-app.Initializing(func(c component.IContainer) error {
-    qtask.CreateDB(c) //测试环境首次运行时调用。app:*hydra.MicroApp
-}
+
+编译qtask并运行命令:`qtask [注册中心地址] [平台名称]`
+
+```sh
+qtask zk://192.168.0.109 mall
+
 ```
 
 #### 2. 绑定服务
