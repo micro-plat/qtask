@@ -29,7 +29,7 @@
 
 已配置数据库连接信息(`/[platName]/var/db/[db]`)和消息队列信息(`/[platName]/var/queue/[queue]`)
 
-编译 `qtask` 并运行命令:`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
+编译 `qtask` 并运行命令:`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中
 
 ```sh
 qtask zk://192.168.0.109 mall
