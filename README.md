@@ -22,11 +22,11 @@
 
 √ 　基于 hydra 构建
 
-## 示例:
+## 一、准备:
 
 前置条件：hydra 项目，已配置数据库连接信息(`/[platName]/var/db/[db]`)和消息队列信息(`/[platName]/var/queue/[queue]`)
 
-#### 1. 创建任务表
+#### 创建任务表
 
 编译 `qtask` 并运行命令:`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
 
@@ -46,7 +46,12 @@ qtask zk://192.168.0.109 mall mdb
 
 > 即创建到`/mall/var/db/mdb`配置的数据库中
 
-#### 2. 绑定服务
+
+
+## 二、编码
+
+
+#### 1. 绑定服务
 
 ```go
 app.Initializing(func(c component.IContainer) error {
@@ -56,7 +61,7 @@ app.Initializing(func(c component.IContainer) error {
 
 ```
 
-#### 3. 创建任务
+#### 2. 创建任务
 
 ```go
 //业务逻辑
@@ -73,7 +78,7 @@ qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 },3600,"GCR:ORDER:BIND")
 ```
 
-#### 4. 处理 `GCR:ORDER:BIND`消息
+#### 3. 处理 `GCR:ORDER:BIND`消息
 
 ```go
 
@@ -92,10 +97,9 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 }
 
 ```
+## 其它
 
-#### 5. 其它
-
-1. 自定义数据库名，队列名
+#### 1. 自定义数据库名，队列名
 
 ```go
 
@@ -103,7 +107,7 @@ qtask.Config("order_db","rds_queue") //配置数据库名，队列名
 
 ```
 
-2. 使用不同的数据库
+#### 2. 使用不同的数据库
 
 使用 mysql 数据库
 
