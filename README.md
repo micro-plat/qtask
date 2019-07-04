@@ -24,7 +24,7 @@
 
 ## 示例:
 
-前置条件：hydra 项目，已配置数据库，消息队列
+前置条件：hydra 项目，已配置数据库连接信息(`/[platName]/var/db/[db]`)和消息队列信息(`/[platName]/var/queue/[queue]`)
 
 #### 1. 创建任务表
 
