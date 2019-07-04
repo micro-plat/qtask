@@ -97,7 +97,7 @@ func OrderBind(ctx *context.Context) (r interface{}) {
 }
 
 ```
-## 其它
+## 三、其它
 
 #### 1. 自定义数据库名，队列名
 
