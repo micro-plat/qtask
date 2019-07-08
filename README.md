@@ -26,36 +26,31 @@
 
 #### 创建任务表
 
-- 1. 编译 `qtask`
-
-创始 mysql 数据库
+##### 1. 编译 `qtask`
 
 ```sh
- go install github.com/qtask/qtask
+ go install github.com/qtask/qtask #mysql
+
+ 或
+
+ go install -tags "oci" github.com/qtask/qtask # oracle
 
 ```
 
-创始 oracle 数据库
-
 ```sh
- go install -tags "oci" github.com/qtask/qtask
 
 ```
 
-- 2. 运行命令
+##### 2. 运行命令
+
      `qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
 
 ```sh
-qtask zk://192.168.0.109 mall
+qtask zk://192.168.0.109 mall #根据/mall/var/db/db创建数据库
 
-```
+或
 
-> 即创建到`/mall/var/db/db`配置的数据库中
-
-指定数据库配置名
-
-```sh
-qtask zk://192.168.0.109 mall mdb
+qtask zk://192.168.0.109 mall mdb #根据/mall/var/db/mdb创建数据库
 
 ```
 
