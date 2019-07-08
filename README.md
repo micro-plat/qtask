@@ -43,7 +43,7 @@
 
 #### 2. 运行命令
 
-     `qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
+`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
 
 ```sh
 qtask zk://192.168.0.109 mall #根据/mall/var/db/db创建数据库
@@ -53,8 +53,6 @@ qtask zk://192.168.0.109 mall #根据/mall/var/db/db创建数据库
 qtask zk://192.168.0.109 mall mdb #根据/mall/var/db/mdb创建数据库
 
 ```
-
-> 即创建到`/mall/var/db/mdb`配置的数据库中
 
 ## 二、编码
 
