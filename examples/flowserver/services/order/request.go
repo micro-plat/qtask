@@ -20,7 +20,7 @@ func (u *RequestHandler) Handle(ctx *context.Context) (r interface{}) {
 
 	_, err := qtask.Create(ctx, "订单支付任务－立即", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, "QTASK:TEST:ORDER-PAY")
+	}, 300, "QTASK:TEST:ORDER-PAY", qtask.WithFirstTry(60), qtask.WithDeadline(3600))
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (u *RequestHandler) DelayHandle(ctx *context.Context) (r interface{}) {
 
 	_, err := qtask.Delay(ctx, "订单支付任务－延迟", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, "QTASK:TEST:ORDER-PAY")
+	}, 300, "QTASK:TEST:ORDER-PAY", qtask.WithFirstTry(60), qtask.WithDeadline(86400))
 	if err != nil {
 		return err
 	}

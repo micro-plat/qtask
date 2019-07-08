@@ -11,9 +11,9 @@ import (
 	"github.com/micro-plat/hydra/conf"
 	_ "github.com/micro-plat/hydra/hydra"
 	"github.com/micro-plat/hydra/registry"
-	"github.com/micro-plat/lib4go/db"
+	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/logger"
-	"github.com/micro-plat/qtask/qtask"
+	"github.com/micro-plat/qtask/qtask/db"
 	"github.com/micro-plat/zkcli/rgsts"
 
 	_ "github.com/zkfy/go-oci8"
@@ -48,14 +48,14 @@ func main() {
 	}
 
 	//构建数据库对象
-	db, err := createDB(buff)
+	xdb, err := createDB(buff)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
 
 	//创建数据库
-	err = qtask.CreateDB(db)
+	err = db.CreateDB(xdb)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -63,7 +63,7 @@ func main() {
 	logger.Info("数据表创建成功")
 }
 
-func createDB(buff []byte) (db.IDB, error) {
+func createDB(buff []byte) (ldb.IDB, error) {
 	var dbConf conf.DBConf
 	if err := json.Unmarshal(buff, &dbConf); err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func createDB(buff []byte) (db.IDB, error) {
 	if b, err := govalidator.ValidateStruct(&dbConf); !b {
 		return nil, err
 	}
-	return db.NewDB(dbConf.Provider,
+	return ldb.NewDB(dbConf.Provider,
 		dbConf.ConnString,
 		dbConf.MaxOpen,
 		dbConf.MaxIdle,

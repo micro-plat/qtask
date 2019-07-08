@@ -9,7 +9,7 @@ type flowserver struct {
 func main() {
 	app := &flowserver{
 		hydra.NewApp(
-			hydra.WithPlatName("github.com"),
+			hydra.WithPlatName("qtask"),
 			hydra.WithSystemName("flowserver"),
 			hydra.WithServerTypes("api-cron-mqc"),
 			hydra.WithDebug()),

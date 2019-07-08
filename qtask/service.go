@@ -6,6 +6,7 @@ import (
 	"github.com/micro-plat/hydra/conf"
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/hydra/hydra"
+	"github.com/micro-plat/qtask/qtask/db"
 )
 
 //Bind 绑定服务
@@ -29,11 +30,11 @@ func Bind(app *hydra.MicroApp, scanSecond int, dayBefore int) {
 func Scan(ctx *context.Context) (r interface{}) {
 
 	ctx.Log.Info("---------------qtask:任务扫描----------------")
-	db, err := ctx.GetContainer().GetDB(dbName)
+	xdb, err := ctx.GetContainer().GetDB(dbName)
 	if err != nil {
 		return err
 	}
-	rows, err := queryTasks(db)
+	rows, err := db.QueryTasks(xdb)
 	if err != nil {
 		return err
 	}
@@ -57,11 +58,11 @@ func Scan(ctx *context.Context) (r interface{}) {
 func Clear(day int) func(ctx *context.Context) (r interface{}) {
 	return func(ctx *context.Context) (r interface{}) {
 		ctx.Log.Infof("---------------qtask:清理%d天前的任务----------------", day)
-		db, err := ctx.GetContainer().GetDB(dbName)
+		xdb, err := ctx.GetContainer().GetDB(dbName)
 		if err != nil {
 			return err
 		}
-		err = clearTask(db, day)
+		err = db.ClearTask(xdb, day)
 		if err != nil {
 			return err
 		}

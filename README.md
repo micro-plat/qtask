@@ -28,7 +28,23 @@
 
 #### 1. 创建任务表
 
-编译 `qtask` 并运行命令:`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
+编译 `qtask`
+
+- 创始 mysql 数据库
+
+```sh
+ go install github.com/qtask/qtask
+
+```
+
+- 创始 oracle 数据库
+
+```sh
+ go install -tags "oci" github.com/qtask/qtask
+
+```
+
+运行命令:`qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
 
 ```sh
 qtask zk://192.168.0.109 mall
@@ -70,8 +86,12 @@ qtask.Create(c,"订单绑定任务",map[string]interface{}{
 //创建延时任务，将任务保存到数据库(状态为等待处理),超时后放入消息队列
 qtask.Delay(c,"订单绑定任务",map[string]interface{}{
     "order_no":"8973097380045"
-},3600,"GCR:ORDER:BIND")
+},3600,"GCR:ORDER:BIND",qtask.WithFirstTry(60), qtask.WithDeadline(86400))
 ```
+
+> qtask.WithFirstTry 设置首次放入队列时间
+
+> qtask.WithDeadline 设置任务截止时间
 
 #### 4. 处理 `GCR:ORDER:BIND`消息
 
