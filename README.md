@@ -29,11 +29,11 @@
 #### 1. 编译 `qtask`
 
 ```sh
- go install github.com/micro-plat/qtask #mysql
+ ~/work/bin$ go install github.com/micro-plat/qtask #mysql
 
  或
 
- go install -tags "oci" github.com/micro-plat/qtask # oracle
+ ~/work/bin$ go install -tags "oci" github.com/micro-plat/qtask # oracle
 
 ```
 
@@ -46,11 +46,11 @@
 `qtask [注册中心地址] [平台名称]` 即可将 `qtask` 需要的表创建到`/平台/var/db/db` 配置对应的数据库中。
 
 ```sh
-qtask zk://192.168.0.109 mall #根据/mall/var/db/db创建数据库
+~/work/bin$ qtask zk://192.168.0.109 mall #根据/mall/var/db/db创建数据库
 
 或
 
-qtask zk://192.168.0.109 mall mdb #根据/mall/var/db/mdb创建数据库
+~/work/bin$ qtask zk://192.168.0.109 mall mdb #根据/mall/var/db/mdb创建数据库
 
 ```
 
