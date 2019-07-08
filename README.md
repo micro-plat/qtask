@@ -29,11 +29,11 @@
 #### 1. 编译 `qtask`
 
 ```sh
- go install github.com/qtask/qtask #mysql
+ go install github.com/micro-plat/qtask #mysql
 
  或
 
- go install -tags "oci" github.com/qtask/qtask # oracle
+ go install -tags "oci" github.com/micro-plat/qtask # oracle
 
 ```
 
