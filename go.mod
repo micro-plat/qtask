@@ -1,4 +1,4 @@
-module qtask
+module github.com/micro-plat/qtask
 
 go 1.12
 
