@@ -103,7 +103,7 @@ func getQueue(c interface{}) (db queue.IQueue, err error) {
 	case *context.Context:
 		return v.GetContainer().GetQueue(queueName)
 	case component.IContainer:
-		return v.GetQueue(dbName)
+		return v.GetQueue(queueName)
 	case queue.IQueue:
 		return v, nil
 	default:
