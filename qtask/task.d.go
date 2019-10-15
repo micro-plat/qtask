@@ -28,7 +28,11 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]in
 	if err != nil {
 		return 0, fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
 	}
-	queue, err := getQueue(c)
+	container, ok := args["container"]
+	if !ok {
+		container = c
+	}
+	queue, err := getQueue(container)
 	if err != nil {
 		return 0, err
 	}
