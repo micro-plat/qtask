@@ -13,11 +13,11 @@ import (
 )
 
 //自定义安装程序
-func CreateDB(xdb db.IDB) error {
+func CreateDB(xdb db.IDBExecuter) error {
 	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/qtask/db/sql/oracle")
 }
 
-func SaveTask(db db.IDB, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (int64, error) {
+func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (int64, error) {
 	imap := map[string]interface{}{
 		"name": name,
 	}
@@ -51,7 +51,7 @@ func SaveTask(db db.IDB, name string, input map[string]interface{}, timeout int,
 	return types.GetInt64(taskID), nil
 }
 
-func QueryTasks(db db.IDB) (rows db.QueryRows, err error) {
+func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
 	imap := map[string]interface{}{
 		"name": "获取任务列表",
 	}
@@ -79,7 +79,7 @@ func QueryTasks(db db.IDB) (rows db.QueryRows, err error) {
 	return rows, nil
 }
 
-func ClearTask(db db.IDB, day int) error {
+func ClearTask(db db.IDBExecuter, day int) error {
 	input := map[string]interface{}{
 		"day": day,
 	}

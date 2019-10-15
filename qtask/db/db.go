@@ -6,7 +6,7 @@ import (
 	"github.com/micro-plat/lib4go/db"
 )
 
-func ProcessingTask(db db.IDB, taskID int64) error {
+func ProcessingTask(db db.IDBExecuter, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,
 	}
@@ -17,7 +17,7 @@ func ProcessingTask(db db.IDB, taskID int64) error {
 	return nil
 }
 
-func FinishTask(db db.IDB, taskID int64) error {
+func FinishTask(db db.IDBExecuter, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,
 	}
