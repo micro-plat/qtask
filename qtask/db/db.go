@@ -21,8 +21,8 @@ func FinishTask(db db.IDBExecuter, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,
 	}
-	row, _, _, err := db.Execute(sqlFinishTask, imap)
-	if err != nil || row != 1 {
+	_, _, _, err := db.Execute(sqlFinishTask, imap)
+	if err != nil {
 		return fmt.Errorf("关闭任务(%d)失败 %v", taskID, err)
 	}
 	return nil
