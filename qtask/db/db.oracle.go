@@ -1,4 +1,4 @@
-// +build oci
+// +build oracle
 
 package db
 
@@ -8,6 +8,7 @@ import (
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/types"
+	_ "github.com/zkfy/go-oci8"
 
 	"github.com/micro-plat/lib4go/jsons"
 )
