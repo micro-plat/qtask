@@ -3,9 +3,8 @@ package qtask
 import (
 	"fmt"
 
-	"github.com/micro-plat/lib4go/jsons"
-
 	ldb "github.com/micro-plat/lib4go/db"
+	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/qtask/qtask/db"
 )
 
@@ -25,17 +24,13 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 
 	//发送到消息队列
 	input["task_id"] = taskID
-	buff, err := jsons.Marshal(input)
-	if err != nil {
-		return 0, nil, fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
-	}
-	container, ok := args["container"]
-	if !ok {
-		container = c
-	}
 
 	callback = func(c interface{}) error {
-		queue, err := getQueue(container)
+		buff, err := jsons.Marshal(input)
+		if err != nil {
+			return fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
+		}
+		queue, err := getQueue(c)
 		if err != nil {
 			return err
 		}
