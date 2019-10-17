@@ -5,13 +5,6 @@ type opts map[string]interface{}
 //Option 配置选项
 type Option func(opts)
 
-//WithContainer
-func WithContainer(i interface{}) Option {
-	return func(o opts) {
-		o["container"] = i
-	}
-}
-
 //WithFirstTry 秒数，设置首次重试放入队列时间
 func WithFirstTry(second int) Option {
 	return func(o opts) {

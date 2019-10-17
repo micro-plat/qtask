@@ -15,5 +15,5 @@ func init() {
 	app.Micro("/order/request", order.NewRequestHandler)
 	app.Flow("/order/pay", order.NewPayHandler)
 
-	qtask.Bind(app.MicroApp, 10, 3)
+	qtask.Bind(app, 10, 3)
 }
