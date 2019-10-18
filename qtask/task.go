@@ -16,15 +16,15 @@ import (
 //input:任务关健参数，序列化为json后存储，一般只允许传入关键参数。系统会在此输入参数中增加一个参数"task_id",业务流程需使用"task_id"修改任务为处理中或完结任务
 //intervalTimeout:任务单次执行的超时时长，即下次执行时间距离上次执行时间的秒数，任务被放入消息队列、被标记为正在处理等都会自动调整下次执行时间
 //mq: 消息队列名称
-func Create(c interface{}, name string, input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, callback func(c interface{}) error, err error) {
+func Create(c interface{}, name string, input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, fcallback func(c interface{}) error, err error) {
 
 	m, xdb, err := getTrans(c)
 	if err != nil {
 		return 0, nil, err
 	}
-	taskID, callback, err = create(xdb, c, name, input, intervalTimeout, mq, opts...)
+	taskID, fcallback, err = create(xdb, c, name, input, intervalTimeout, mq, opts...)
 	if !m {
-		return taskID, nil, err
+		return taskID, fcallback, err
 	}
 	if err != nil {
 		xdb.Rollback()

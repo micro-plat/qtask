@@ -25,18 +25,20 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 	//发送到消息队列
 	input["task_id"] = taskID
 
-	callback = func(c interface{}) error {
-		buff, err := jsons.Marshal(input)
-		if err != nil {
-			return fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, input)
+	fcallback := func(input *map[string]interface{}) func(c interface{}) error {
+		return func(c interface{}) error {
+			buff, err := jsons.Marshal(*input)
+			if err != nil {
+				return fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, *input)
+			}
+			queue, err := getQueue(c)
+			if err != nil {
+				return err
+			}
+			return queue.Push(mq, string(buff))
 		}
-		queue, err := getQueue(c)
-		if err != nil {
-			return err
-		}
-		return queue.Push(mq, string(buff))
 	}
-	return taskID, callback, nil
+	return taskID, fcallback(&input), nil
 }
 
 func delay(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, err error) {
