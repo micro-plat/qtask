@@ -12,10 +12,6 @@ import (
 	"github.com/micro-plat/lib4go/jsons"
 )
 
-//CreateDB 自定义安装程序
-func CreateDB(xdb db.IDBExecuter) error {
-	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/qtask/db/sql/mysql")
-}
 func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (taskID int64, err error) {
 	imap := map[string]interface{}{
 		"name": name,

@@ -7,16 +7,14 @@ import (
 	"strings"
 
 	"github.com/asaskevich/govalidator"
-	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/micro-plat/hydra/conf"
 	_ "github.com/micro-plat/hydra/hydra"
 	"github.com/micro-plat/hydra/registry"
-	ldb "github.com/micro-plat/lib4go/db"
+	"github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/logger"
-	"github.com/micro-plat/qtask/qtask/db"
+	"github.com/micro-plat/qtask/qtask/db/sql/creator"
 	"github.com/micro-plat/zkcli/rgsts"
-
-	_ "github.com/zkfy/go-oci8"
 )
 
 func main() {
@@ -55,7 +53,7 @@ func main() {
 	}
 
 	//创建数据库
-	err = db.CreateDB(xdb)
+	err = creator.CreateDB(xdb)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -63,7 +61,7 @@ func main() {
 	logger.Info("数据表创建成功")
 }
 
-func createDB(buff []byte) (ldb.IDB, error) {
+func createDB(buff []byte) (db.IDB, error) {
 	var dbConf conf.DBConf
 	if err := json.Unmarshal(buff, &dbConf); err != nil {
 		return nil, err
@@ -71,7 +69,7 @@ func createDB(buff []byte) (ldb.IDB, error) {
 	if b, err := govalidator.ValidateStruct(&dbConf); !b {
 		return nil, err
 	}
-	return ldb.NewDB(dbConf.Provider,
+	return db.NewDB(dbConf.Provider,
 		dbConf.ConnString,
 		dbConf.MaxOpen,
 		dbConf.MaxIdle,
