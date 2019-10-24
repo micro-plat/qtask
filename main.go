@@ -1,20 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
-	"strings"
 
-	"github.com/asaskevich/govalidator"
-
-	"github.com/micro-plat/hydra/conf"
 	_ "github.com/micro-plat/hydra/hydra"
-	"github.com/micro-plat/hydra/registry"
 	"github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/logger"
 	"github.com/micro-plat/qtask/qtask/db/sql/creator"
-	"github.com/micro-plat/zkcli/rgsts"
 )
 
 func main() {
@@ -23,30 +15,17 @@ func main() {
 	defer logger.Close()
 	logger := logger.New("qtask")
 	if len(os.Args) < 3 {
-		logger.Error("命令错误，请使用 ’qtask [注册中心地址] [平台名称]‘ 注册中心连接串(proto://host)，平台名称(根据平台名称获取数据库配置串)")
-		return
-	}
-	zkAddr := os.Args[1]
-	platName := strings.Trim(os.Args[2], "/")
-	dbName := "db"
-	if len(os.Args) > 3 {
-		dbName = os.Args[3]
-	}
-
-	//构建注册中心参数
-	registry, err := registry.NewRegistryWithAddress(zkAddr, logger)
-	if err != nil {
-		rgsts.Log.Error(err)
-		return
-	}
-	buff, _, err := registry.GetValue(fmt.Sprintf("/%s/var/db/%s", platName, dbName))
-	if err != nil {
-		logger.Error(err)
+		logger.Error("命令错误，请使用 ’qtask [数据库类型] [连接串名称]‘ 数据库类型:mysql,oracle，连接串信息:[用户名]:[密码]@[tns名称] 或 [用户名]:[密码]@[数据库名]/数据库ip")
 		return
 	}
 
 	//构建数据库对象
-	xdb, err := createDB(buff)
+	c, err := db.ParseConnectString(os.Args[1], os.Args[2])
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	xdb, err := db.NewDB(os.Args[1], c, 1, 0, 600)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -59,19 +38,4 @@ func main() {
 		return
 	}
 	logger.Info("数据表创建成功")
-}
-
-func createDB(buff []byte) (db.IDB, error) {
-	var dbConf conf.DBConf
-	if err := json.Unmarshal(buff, &dbConf); err != nil {
-		return nil, err
-	}
-	if b, err := govalidator.ValidateStruct(&dbConf); !b {
-		return nil, err
-	}
-	return db.NewDB(dbConf.Provider,
-		dbConf.ConnString,
-		dbConf.MaxOpen,
-		dbConf.MaxIdle,
-		dbConf.LifeTime)
 }
