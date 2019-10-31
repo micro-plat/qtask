@@ -1,7 +1,11 @@
 package main
 
 import (
+	"github.com/micro-plat/hydra/conf"
+	"github.com/micro-plat/hydra/context"
+
 	"github.com/micro-plat/hydra/component"
+	"github.com/micro-plat/qtask/examples/flowserver/services/consume"
 	"github.com/micro-plat/qtask/examples/flowserver/services/order"
 	"github.com/micro-plat/qtask/qtask"
 )
@@ -13,7 +17,20 @@ func init() {
 	})
 
 	app.Micro("/order/request", order.NewRequestHandler)
-	app.Flow("/order/pay", order.NewPayHandler)
+	app.MQC("/order/pay", order.NewPayHandler)
+
+	queryChan := app.GetDynamicQueue()
+	queryChan <- &conf.Queue{
+		Queue:   "QTASK:TEST:ORDER-PAY",
+		Service: "/order/pay",
+	}
 
 	qtask.Bind(app, 10, 3)
+
+	qtask.RegConsume(app, "a:b", func(ctx *context.Context) error {
+		ctx.Log.Info("qtask.RegConsume")
+		return nil
+	})
+	qtask.RegConsume(app, "a:c", consume.ProcessConsumeXXXX)
+	qtask.RegConsume(app, "a.d", consume.ProcessConsumeXXXX)
 }

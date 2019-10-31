@@ -3,6 +3,7 @@ package qtask
 import (
 	"strings"
 
+	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/conf"
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/hydra/hydra"
@@ -20,20 +21,30 @@ func RegConsume(app *hydra.MicroApp, queueName string, callback ConsumeCallBack,
 		Service: path,
 	}
 
-	app.MQC(path, func(ctx *context.Context) interface{} {
-		taskID := ctx.Request.GetInt64("task_id")
-		err := Processing(ctx, taskID)
-		if err != nil {
-			return err
+	app.MQC("/"+path, func(container component.IContainer) component.Handler {
+		return &consumeHandler{
+			callback: callback,
 		}
-		err = callback(ctx)
-		if err != nil {
-			return err
-		}
-		err = Finish(ctx, taskID)
-		if err != nil {
-			return err
-		}
-		return nil
 	}, tags...)
+}
+
+type consumeHandler struct {
+	callback ConsumeCallBack
+}
+
+func (h *consumeHandler) Handle(ctx *context.Context) interface{} {
+	taskID := ctx.Request.GetInt64("task_id")
+	err := Processing(ctx, taskID)
+	if err != nil {
+		return err
+	}
+	err = h.callback(ctx)
+	if err != nil {
+		return err
+	}
+	err = Finish(ctx, taskID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
