@@ -5,7 +5,7 @@ import (
 
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/jsons"
-	"github.com/micro-plat/qtask/qtask/db"
+	"github.com/micro-plat/qtask/modules/qtask/db"
 )
 
 func create(xdb ldb.IDBExecuter, c interface{}, name string,
@@ -41,12 +41,13 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 	return taskID, fcallback(&input), nil
 }
 
-func delay(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, err error) {
+func delay(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]interface{}, firstTime int, intervalTimeout int, mq string, opts ...Option) (taskID int64, err error) {
 
 	args := make(map[string]interface{})
 	for _, opt := range opts {
 		opt(args)
 	}
+	args["first_timeout"] = firstTime
 
 	return db.SaveTask(xdb, name, input, intervalTimeout, mq, args)
 }

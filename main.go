@@ -13,7 +13,7 @@ import (
 	"github.com/micro-plat/hydra/registry"
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/logger"
-	"github.com/micro-plat/qtask/qtask/db"
+	"github.com/micro-plat/qtask/modules/qtask/db"
 	"github.com/micro-plat/zkcli/rgsts"
 
 	_ "github.com/zkfy/go-oci8"

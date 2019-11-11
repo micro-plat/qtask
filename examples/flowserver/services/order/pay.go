@@ -3,7 +3,7 @@ package order
 import (
 	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/context"
-	"github.com/micro-plat/qtask/qtask"
+	"github.com/micro-plat/qtask/modules/qtask"
 )
 
 type PayHandler struct {

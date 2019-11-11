@@ -56,3 +56,4 @@ create sequence seq_qtask_system_task_batch_id
 	cache 20;
 
 create index IDX_QTASK_INFO_MAX_TIME on TSK_SYSTEM_TASK (MAX_EXECUTE_TIME, STATUS);
+create index IDX_QTASK_INFO_BATCH_ID on TSK_SYSTEM_TASK (NEXT_EXECUTE_TIME, BATCH_ID);

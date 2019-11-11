@@ -25,7 +25,9 @@ if not exists  tsk_system_task
 KEY `next_execute_time`
 (`next_execute_time`,`status`) COMMENT 'idx_task_next_time',
   KEY `max_execute_time`
-(`max_execute_time`,`status`) COMMENT 'idx_task_max_time'
+(`max_execute_time`,`status`) COMMENT 'idx_task_max_time',
+KEY `next_execute_time_batch_id`
+(`next_execute_time`,`batch_id`) COMMENT 'idx_task_batch_id',
 				
   )COMMENT='### 任务表';
 

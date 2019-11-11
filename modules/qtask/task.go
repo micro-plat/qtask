@@ -7,11 +7,11 @@ import (
 	"github.com/micro-plat/hydra/context"
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/queue"
-	"github.com/micro-plat/qtask/qtask/db"
+	"github.com/micro-plat/qtask/modules/qtask/db"
 )
 
 //Create 创建实时任务，将任务信息保存到数据库并发送消息队列
-//c:*context.Context,component.IContainer,db.IDBExecuter
+//c:*context.Context,component.IContainer,db.IDBExecuter,db.IDBTrans
 //name:任务名称
 //input:任务关健参数，序列化为json后存储，一般只允许传入关键参数。系统会在此输入参数中增加一个参数"task_id",业务流程需使用"task_id"修改任务为处理中或完结任务
 //intervalTimeout:任务单次执行的超时时长，即下次执行时间距离上次执行时间的秒数，任务被放入消息队列、被标记为正在处理等都会自动调整下次执行时间
@@ -36,13 +36,19 @@ func Create(c interface{}, name string, input map[string]interface{}, intervalTi
 }
 
 //Delay 创建延迟任务，将任务信息保存到数据库，超时后将任务取出放到消息队列
+//c:*context.Context,component.IContainer,db.IDBExecuter,db.IDBTrans
+//name:任务名称
+//input:任务关健参数，序列化为json后存储，一般只允许传入关键参数。系统会在此输入参数中增加一个参数"task_id",业务流程需使用"task_id"修改任务为处理中或完结任务
+// 首次执行时间
+//intervalTimeout:任务单次执行的超时时长，即下次执行时间距离上次执行时间的秒数，任务被放入消息队列、被标记为正在处理等都会自动调整下次执行时间
+//mq: 消息队列名称
 //调用此函数将延后下次被放入消息队列的时间
-func Delay(c interface{}, name string, input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, err error) {
+func Delay(c interface{}, name string, input map[string]interface{}, firstTime int, intervalTimeout int, mq string, opts ...Option) (taskID int64, err error) {
 	m, xdb, err := getTrans(c)
 	if err != nil {
 		return 0, err
 	}
-	taskID, err = delay(xdb, c, name, input, intervalTimeout, mq, opts...)
+	taskID, err = delay(xdb, c, name, input, firstTime, intervalTimeout, mq, opts...)
 	if !m {
 		return taskID, err
 	}
@@ -63,7 +69,7 @@ func Processing(c interface{}, taskID int64) error {
 	if err != nil {
 		return err
 	}
-	err = db.ProcessingTask(xdb, taskID)
+	err = db.Processing(xdb, taskID)
 	if !m {
 		return err
 	}
@@ -82,7 +88,7 @@ func Finish(c interface{}, taskID int64) error {
 	if err != nil {
 		return err
 	}
-	err = db.FinishTask(xdb, taskID)
+	err = db.Finish(xdb, taskID)
 	if !m {
 		return err
 	}
@@ -113,10 +119,10 @@ func getTrans(c interface{}) (bool, ldb.IDBTrans, error) {
 func getDB(c interface{}) (bool, ldb.IDBExecuter, error) {
 	switch v := c.(type) {
 	case *context.Context:
-		db, err := v.GetContainer().GetDB(dbName)
+		db, err := v.GetContainer().GetDB(DBName)
 		return false, db, err
 	case component.IContainer:
-		db, err := v.GetDB(dbName)
+		db, err := v.GetDB(DBName)
 		return false, db, err
 	case ldb.IDB:
 		return false, v, nil
@@ -129,9 +135,9 @@ func getDB(c interface{}) (bool, ldb.IDBExecuter, error) {
 func getQueue(c interface{}) (db queue.IQueue, err error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetQueue(queueName)
+		return v.GetContainer().GetQueue(QueueName)
 	case component.IContainer:
-		return v.GetQueue(queueName)
+		return v.GetQueue(QueueName)
 	case queue.IQueue:
 		return v, nil
 	default:
