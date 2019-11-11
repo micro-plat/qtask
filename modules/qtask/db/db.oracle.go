@@ -11,11 +11,6 @@ import (
 	_ "github.com/zkfy/go-oci8"
 )
 
-//自定义安装程序
-func CreateDB(xdb db.IDBExecuter) error {
-	return db.CreateDB(xdb, "src/github.com/micro-plat/qtask/modules/const/sql/db/oracle")
-}
-
 func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (int64, error) {
 	return create(db, name, input, timeout, mq, args, sql.SQLGetSEQ, sql.SQLCreateTaskID)
 }
