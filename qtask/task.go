@@ -7,7 +7,7 @@ import (
 	"github.com/micro-plat/hydra/context"
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/queue"
-	"github.com/micro-plat/qtask/modules/qtask/db"
+	"github.com/micro-plat/qtask/modules/db"
 )
 
 //Create 创建实时任务，将任务信息保存到数据库并发送消息队列

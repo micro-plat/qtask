@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/micro-plat/hydra/context"
-	"github.com/micro-plat/qtask/modules/qtask"
-	"github.com/micro-plat/qtask/modules/qtask/db"
+	"github.com/micro-plat/qtask/modules/db"
+	"github.com/micro-plat/qtask/qtask"
 )
 
 //Scan 扫描任务，定时从ＤＢ中扫描待处理任务并放入消息队列

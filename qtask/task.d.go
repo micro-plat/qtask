@@ -5,7 +5,7 @@ import (
 
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/jsons"
-	"github.com/micro-plat/qtask/modules/qtask/db"
+	"github.com/micro-plat/qtask/modules/db"
 )
 
 func create(xdb ldb.IDBExecuter, c interface{}, name string,
