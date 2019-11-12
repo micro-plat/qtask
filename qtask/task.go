@@ -7,6 +7,7 @@ import (
 	"github.com/micro-plat/hydra/context"
 	ldb "github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/queue"
+	"github.com/micro-plat/qtask/modules/const/conf"
 	"github.com/micro-plat/qtask/modules/db"
 )
 
@@ -119,10 +120,10 @@ func getTrans(c interface{}) (bool, ldb.IDBTrans, error) {
 func getDB(c interface{}) (bool, ldb.IDBExecuter, error) {
 	switch v := c.(type) {
 	case *context.Context:
-		db, err := v.GetContainer().GetDB(DBName)
+		db, err := v.GetContainer().GetDB(conf.DBName)
 		return false, db, err
 	case component.IContainer:
-		db, err := v.GetDB(DBName)
+		db, err := v.GetDB(conf.DBName)
 		return false, db, err
 	case ldb.IDB:
 		return false, v, nil
@@ -135,9 +136,9 @@ func getDB(c interface{}) (bool, ldb.IDBExecuter, error) {
 func getQueue(c interface{}) (db queue.IQueue, err error) {
 	switch v := c.(type) {
 	case *context.Context:
-		return v.GetContainer().GetQueue(QueueName)
+		return v.GetContainer().GetQueue(conf.QueueName)
 	case component.IContainer:
-		return v.GetQueue(QueueName)
+		return v.GetQueue(conf.QueueName)
 	case queue.IQueue:
 		return v, nil
 	default:

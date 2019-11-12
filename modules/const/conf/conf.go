@@ -1,4 +1,4 @@
-package qtask
+package conf
 
 // DBName 数据库名称
 var DBName = "db"

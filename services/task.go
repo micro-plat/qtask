@@ -4,15 +4,15 @@ import (
 	"fmt"
 
 	"github.com/micro-plat/hydra/context"
+	"github.com/micro-plat/qtask/modules/const/conf"
 	"github.com/micro-plat/qtask/modules/db"
-	"github.com/micro-plat/qtask/qtask"
 )
 
 //Scan 扫描任务，定时从ＤＢ中扫描待处理任务并放入消息队列
 func Scan(ctx *context.Context) (r interface{}) {
 
 	ctx.Log.Info("---------------qtask:任务扫描----------------")
-	xdb, err := ctx.GetContainer().GetDB(qtask.DBName)
+	xdb, err := ctx.GetContainer().GetDB(conf.DBName)
 	if err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func Scan(ctx *context.Context) (r interface{}) {
 		return err
 	}
 	ctx.Log.Info("发送任务到消息队列")
-	queue, err := ctx.GetContainer().GetQueue(qtask.QueueName)
+	queue, err := ctx.GetContainer().GetQueue(conf.QueueName)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func Scan(ctx *context.Context) (r interface{}) {
 func Clear(day int) func(ctx *context.Context) (r interface{}) {
 	return func(ctx *context.Context) (r interface{}) {
 		ctx.Log.Infof("---------------qtask:清理%d天前的任务----------------", day)
-		xdb, err := ctx.GetContainer().GetDB(qtask.DBName)
+		xdb, err := ctx.GetContainer().GetDB(conf.DBName)
 		if err != nil {
 			return err
 		}
