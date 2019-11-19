@@ -12,10 +12,11 @@ import (
 // SaveTask 保存任务
 func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (taskID int64, err error) {
 
-	input["seq_id"], err = create(db, name, input, timeout, mq, args, sql.SQLGetSEQ, sql.SQLCreateTaskID)
+	taskID, err = create(db, name, input, timeout, mq, args, sql.SQLGetSEQ, sql.SQLCreateTaskID)
 	if err != nil {
 		return
 	}
+	input["seq_id"] = taskID
 	_, _, _, err = db.Execute(sql.SQLClearSEQ, input)
 	if err != nil {
 		return 0, fmt.Errorf("删除序列数据失败 %v", err)

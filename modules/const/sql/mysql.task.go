@@ -32,13 +32,13 @@ t.status=0
 where t.task_id=@task_id and t.status in(20,30)`
 
 const SQLUpdateTask = `update tsk_system_task t set 
-t.batch_id=@seq_id,
+t.batch_id=@batch_id,
 t.next_execute_time= date_add(now(),interval t.next_interval second)
 where t.status in(20,30) and t.next_execute_time < now() and t.max_execute_time > now()
 limit 1000`
 
 const SQLQueryWaitProcess = `select t.queue_name,t.msg_content content from tsk_system_task t
- where t.batch_id=@seq_id and t.next_execute_time > now()`
+ where t.batch_id=@batch_id and t.next_execute_time > now()`
 
 const SQLClearTask = `delete from tsk_system_task
 where max_execute_time < date_add(now(),interval -#day day)`
