@@ -27,7 +27,7 @@ KEY `next_execute_time`
   KEY `max_execute_time`
 (`max_execute_time`,`status`) COMMENT 'idx_task_max_time',
 KEY `next_execute_time_batch_id`
-(`next_execute_time`,`batch_id`) COMMENT 'idx_task_batch_id',
+(`next_execute_time`,`batch_id`) COMMENT 'idx_task_batch_id'
 				
   )COMMENT='### 任务表';
 
