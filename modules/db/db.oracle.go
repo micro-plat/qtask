@@ -8,7 +8,6 @@ import (
 	"github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/modules/const/sql"
-	_ "github.com/zkfy/go-oci8"
 )
 
 func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (int64, error) {
