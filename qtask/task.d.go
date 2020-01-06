@@ -48,6 +48,5 @@ func delay(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]int
 		opt(args)
 	}
 	args["first_timeout"] = firstTime
-
 	return db.SaveTask(xdb, name, input, intervalTimeout, mq, args)
 }

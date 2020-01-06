@@ -117,6 +117,7 @@ github.com/onsi/ginkgo v1.10.1/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+
 github.com/onsi/ginkgo v1.10.2/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/gomega v1.5.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
 github.com/onsi/gomega v1.7.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
+github.com/patrickmn/go-cache v2.1.0+incompatible/go.mod h1:3Qf8kWWT7OJRJbdiICTKqZju1ZixQ/KpMGzzAfe6+WQ=
 github.com/pierrec/cmdflag v0.0.2/go.mod h1:a3zKGZ3cdQUfxjd0RGMLZr8xI3nvpJOB+m6o/1X5BmU=
 github.com/pierrec/lz4 v2.0.5+incompatible h1:2xWsjqPFWcplujydGg4WmhC/6fZqK42wMM8aXeqhl0I=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
@@ -169,6 +170,7 @@ github.com/yosssi/gmq v0.0.1 h1:GhlDVaAQoi3Mvjul/qJXXGfL4JBeE0GQwbWp3eIsja8=
 github.com/yosssi/gmq v0.0.1/go.mod h1:mReykazh0U1JabvuWh1PEbzzJftqOQWsjr0Lwg5jL1Y=
 github.com/zkfy/cron v0.0.0-20170309132418-df38d32658d8 h1:jxPemXnLeekMXItoaw4jZtDfe8HmvFmviUm2L5tEBhE=
 github.com/zkfy/cron v0.0.0-20170309132418-df38d32658d8/go.mod h1:JOZbTZbRDcU9U/JLhwfjNJ9Z3fCrvcwldtFCsB7LnSc=
+github.com/zkfy/go-cache v2.1.0+incompatible/go.mod h1:3BfHxgJ+4h6vTvsIuKZnIf44JzXgECayURPxvafVv5Y=
 github.com/zkfy/go-metrics v0.0.0-20161128210544-1f30fe9094a5 h1:Rb2qQMbEon+BI3IXGh4eW3u/iTLPA3+Y6kNK+gHO32w=
 github.com/zkfy/go-metrics v0.0.0-20161128210544-1f30fe9094a5/go.mod h1:VOfLef4/FOZxeKOJ2BtlXFcirZ3i6/E7dR1wBl37LS8=
 github.com/zkfy/go-oci8 v0.0.0-20180327092318-ad9f59dedff0 h1:jTkoGemWKwQ/TQ+y6nX6LoN2dkV1UW9edx9vIaEt4OQ=
