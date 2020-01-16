@@ -20,7 +20,7 @@ if not exists  tsk_system_task
 		queue_name varchar
 (64)  not null    comment '消息队列' ,
 		msg_content varchar
-(256)      comment '消息内容',
+(1024)      comment '消息内容',
 	
 KEY `next_execute_time`
 (`next_execute_time`,`status`) COMMENT 'idx_task_next_time',

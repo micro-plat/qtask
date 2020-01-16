@@ -16,7 +16,7 @@ create table tsk_system_task
 	status number(2) not null ,
 	batch_id number(20)       ,
 	queue_name varchar2(64) not null ,
-	msg_content varchar2(256)
+	msg_content varchar2(1024)
 );
 
 
