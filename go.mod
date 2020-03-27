@@ -12,5 +12,3 @@ require (
 	github.com/schollz/progressbar/v2 v2.12.1 // indirect
 	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
 )
-
-replace github.com/micro-plat/lib4go => ../../../github.com/micro-plat/lib4go
