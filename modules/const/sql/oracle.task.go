@@ -35,7 +35,7 @@ t.status=0
 where  t.task_id=@task_id and t.status in(20,30)`
 
 const SQLUpdateTask = `update tsk_system_task t set t.batch_id=@batch_id,t.next_execute_time= sysdate+t.next_interval/24/60/60
-where t.status in(20,30) and t.next_execute_time <= sysdate and t.max_execute_time > sysdate 
+where t.status in(20,30) and t.next_execute_time <= sysdate and t.max_execute_time > sysdate and t.count < 5
 and rownum<=1000`
 
 const SQLQueryWaitProcess = `select queue_name,msg_content content from tsk_system_task t where t.batch_id=@batch_id
