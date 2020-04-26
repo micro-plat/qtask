@@ -3,7 +3,7 @@ package order
 import (
 	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/context"
-	"github.com/micro-plat/qtask/modules/qtask"
+	"github.com/micro-plat/qtask/qtask"
 )
 
 type RequestHandler struct {
@@ -23,12 +23,14 @@ func (u *RequestHandler) Handle(ctx *context.Context) (r interface{}) {
 	}
 	_, callback, err := qtask.Create(ctx, "订单支付任务－立即", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, queueName, qtask.WithDeadline(3600))
+	}, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000))
 	if err != nil {
 		return err
 	}
-	err = callback(ctx)
-	ctx.Log.Error(err)
+
+	if err = callback(ctx); err != nil {
+		return err
+	}
 	return "success"
 }
 
@@ -38,7 +40,7 @@ func (u *RequestHandler) DelayHandle(ctx *context.Context) (r interface{}) {
 
 	_, err := qtask.Delay(ctx, "订单支付任务－延迟", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, 300, "QTASK:TEST:ORDER-PAY", qtask.WithDeadline(86400))
+	}, 300, 300, "QTASK:TEST:ORDER-PAY", qtask.WithDeadline(86400), qtask.WithDeleteDeadline(1000))
 	if err != nil {
 		return err
 	}

@@ -58,6 +58,7 @@ func create(db db.IDBExecuter, name string, input map[string]interface{}, timeou
 	imap["next_interval"] = timeout
 	imap["first_timeout"] = types.DecodeInt(imap["first_timeout"], nil, timeout, imap["first_timeout"])
 	imap["max_timeout"] = types.DecodeInt(imap["max_timeout"], nil, 259200, imap["max_timeout"])
+	imap["delete_interval"] = types.DecodeInt(imap["delete_interval"], nil, 0, imap["delete_interval"])
 	imap["queue_name"] = mq
 
 	//保存任务信息
@@ -69,13 +70,11 @@ func create(db db.IDBExecuter, name string, input map[string]interface{}, timeou
 }
 
 // clear 清除任务
-func clear(db db.IDBExecuter, day int, SQLClearTask string) error {
-	input := map[string]interface{}{
-		"day": day,
-	}
-	rows, _, _, err := db.Execute(SQLClearTask, input)
+func clear(db db.IDBExecuter, SQLClearTask string) error {
+
+	rows, _, _, err := db.Execute(SQLClearTask, nil)
 	if err != nil {
-		return fmt.Errorf("清理%d天前的任务失败 %v", day, err)
+		return fmt.Errorf("清理任务失败 %v", err)
 	}
 	if rows == 0 {
 		return context.NewError(204, "无需清理")
@@ -109,4 +108,13 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 		return 0, nil, fmt.Errorf("根据批次查询任务失败 %v", err)
 	}
 	return batchID, rows, nil
+}
+
+// failedTasks 失败任务处理
+func failedTasks(db db.IDBExecuter, SQLFailedTask string) error {
+	_, _, _, err := db.Execute(SQLFailedTask, nil)
+	if err != nil {
+		return fmt.Errorf("修改失败任务批次发生异常,err:%v", err)
+	}
+	return nil
 }

@@ -11,3 +11,10 @@ func WithDeadline(second int) Option {
 		o["max_timeout"] = second
 	}
 }
+
+// WithDeleteDeadline 秒数，设置任务删除截止时间
+func WithDeleteDeadline(second int) Option {
+	return func(o opts) {
+		o["delete_interval"] = second
+	}
+}

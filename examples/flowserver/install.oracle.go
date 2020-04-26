@@ -2,12 +2,18 @@
 
 package main
 
+import (
+	_ "github.com/zkfy/go-oci8"
+)
+
 func init() {
+	app.IsDebug = true
+
 	app.Conf.API.SetMainConf(`{"address":":9090"}`)
 
 	app.Conf.Plat.SetVarConf("db", "db", `{			
 			"provider":"ora",
-			"connString":"sso/123456@orcl136",
+			"connString":"hydra/123456@orcl136",
 			"maxOpen":20,
 			"maxIdle":10,
 			"lifeTime":600		

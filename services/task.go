@@ -37,17 +37,18 @@ func Scan(ctx *context.Context) (r interface{}) {
 }
 
 //Clear 清理任务，删除指定时间以前的任务
-func Clear(day int) func(ctx *context.Context) (r interface{}) {
+func Clear() func(ctx *context.Context) (r interface{}) {
 	return func(ctx *context.Context) (r interface{}) {
-		ctx.Log.Infof("---------------qtask:清理%d天前的任务----------------", day)
+		ctx.Log.Infof("---------------qtask:清理任务----------------")
 		xdb, err := ctx.GetContainer().GetDB(conf.DBName)
 		if err != nil {
 			return err
 		}
-		err = db.ClearTask(xdb, day)
-		if err != nil {
+		ctx.Log.Info("1.开始清除任务")
+		if err = db.ClearTask(xdb); err != nil {
 			return err
 		}
+		ctx.Log.Info("2.完成清除任务")
 		return "success"
 	}
 }

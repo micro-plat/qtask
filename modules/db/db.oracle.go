@@ -15,13 +15,17 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 }
 
 func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
+	// 失败任务处理
+	if err := failedTasks(db, sql.SQLFailedTask); err != nil {
+		return nil, err
+	}
 	_, rows, err = query(db, sql.SQLGetBatch, sql.SQLUpdateTask, sql.SQLQueryWaitProcess)
 	return rows, err
 }
 
 // ClearTask 清除任务
-func ClearTask(db db.IDBExecuter, day int) error {
-	return clear(db, day, sql.SQLClearTask)
+func ClearTask(db db.IDBExecuter) error {
+	return clear(db, sql.SQLClearTask)
 }
 
 // getNewID 获取新ID

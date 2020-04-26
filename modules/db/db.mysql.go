@@ -26,6 +26,12 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 
 // QueryTasks 查询任务
 func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
+
+	// 失败任务处理
+	if err := failedTasks(db, sql.SQLFailedTask); err != nil {
+		return nil, err
+	}
+	// 查询正在执行任务
 	batchID, rows, err := query(db, sql.SQLGetSEQ, sql.SQLUpdateTask, sql.SQLQueryWaitProcess)
 	if err != nil {
 		return nil, err
@@ -34,10 +40,9 @@ func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
 }
 
 // ClearTask 清除任务
-func ClearTask(db db.IDBExecuter, day int) error {
+func ClearTask(db db.IDBExecuter) error {
 
-	err := clear(db, day, sql.SQLClearTask)
-	if err != nil {
+	if err := clear(db, sql.SQLClearTask); err != nil {
 		return err
 	}
 

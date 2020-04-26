@@ -6,10 +6,11 @@ import _ "github.com/go-sql-driver/mysql"
 
 //bindConf 绑定启动配置， 启动时检查注册中心配置是否存在，不存在则引导用户输入配置参数并自动创建到注册中心
 func init() {
+	app.IsDebug = true
 	app.Conf.API.SetMainConf(`{"address":":9090"}`)
 	app.Conf.Plat.SetVarConf("db", "db", `{			
 			"provider":"mysql",
-			"connString":"mrss:123456@tcp(192.168.0.36)/mrss?charset=utf8",
+			"connString":"hydra:123456@tcp(192.168.0.36)/hydra?charset=utf8",
 			"maxOpen":20,
 			"maxIdle":10,
 			"lifeTime":600		
