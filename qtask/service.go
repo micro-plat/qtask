@@ -25,6 +25,6 @@ func Bind(app *hydra.MicroApp, scanSecond int) {
 		ch <- &conf.Task{Cron: fmt.Sprintf("@every %ds", scanSecond), Engine: "*", Service: "/task/scan"}
 		ch <- &conf.Task{Cron: "@daily", Engine: "*", Service: "/task/clear"}
 		app.CRON("/task/scan", services.Scan)     //定时扫描任务
-		app.CRON("/task/clear", services.Clear()) //定时清理任务，删除７天的任务数
+		app.CRON("/task/clear", services.Clear()) //定时清理任务
 	})
 }
