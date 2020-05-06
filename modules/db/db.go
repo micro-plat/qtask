@@ -34,8 +34,9 @@ func Finish(db db.IDBExecuter, taskID int64) error {
 	return nil
 }
 
-// Create 创建任务
-func create(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}, SQLGetSEQ string, SQLCreateTaskID string) (int64, error) {
+// SaveTask 创建任务
+func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, timeout int, mq string, args map[string]interface{}) (taskID int64, err error) {
+
 	imap := map[string]interface{}{
 		"name": name,
 	}
@@ -43,7 +44,7 @@ func create(db db.IDBExecuter, name string, input map[string]interface{}, timeou
 		imap[k] = v
 	}
 	//获取任务编号
-	taskID, err := getNewID(db, SQLGetSEQ, imap)
+	taskID, err = getNewID(db, sql.SQLGetSEQ, imap)
 	if err != nil {
 		return 0, fmt.Errorf("获取任务(%s)编号失败 %v", name, err)
 	}
@@ -62,17 +63,17 @@ func create(db db.IDBExecuter, name string, input map[string]interface{}, timeou
 	imap["queue_name"] = mq
 
 	//保存任务信息
-	row, s, p, err := db.Execute(SQLCreateTaskID, imap)
+	row, s, p, err := db.Execute(sql.SQLCreateTaskID, imap)
 	if err != nil || row != 1 {
 		return 0, fmt.Errorf("创建任务(%s)失败 %v %s,%v", name, err, s, p)
 	}
 	return types.GetInt64(taskID), nil
 }
 
-// clear 清除任务
-func clear(db db.IDBExecuter, SQLClearTask string) error {
+// ClearTask 清除任务
+func ClearTask(db db.IDBExecuter) error {
 
-	rows, _, _, err := db.Execute(SQLClearTask, nil)
+	rows, _, _, err := db.Execute(sql.SQLClearTask, nil)
 	if err != nil {
 		return fmt.Errorf("清理任务失败 %v", err)
 	}
@@ -117,4 +118,19 @@ func failedTasks(db db.IDBExecuter, SQLFailedTask string) error {
 		return fmt.Errorf("修改失败任务批次发生异常,err:%v", err)
 	}
 	return nil
+}
+
+// QueryTasks 查询任务
+func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
+
+	// 失败任务处理
+	if err := failedTasks(db, sql.SQLFailedTask); err != nil {
+		return nil, err
+	}
+	// 查询正在执行任务
+	_, rows, err = query(db, sql.SQLGetSEQ, sql.SQLUpdateTask, sql.SQLQueryWaitProcess)
+	if err != nil {
+		return nil, err
+	}
+	return rows, nil
 }
