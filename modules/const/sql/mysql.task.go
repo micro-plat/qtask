@@ -2,7 +2,7 @@
 
 package sql
 
-const SQLGetSEQ = `insert into tsk_system_seq (name) values (@name)`
+const SQLGetSEQ = `replace into tsk_system_seq (name) values (@name)`
 
 const SQLCreateTaskID = `insert into tsk_system_task
 (task_id,
@@ -60,9 +60,6 @@ where t.batch_id=@batch_id
 and t.next_execute_time > now()`
 
 const SQLClearTask = `delete from tsk_system_task where delete_time < now() and status in (0, 90)`
-
-const SQLClearSEQ = `delete from tsk_system_seq
-where 1=1 &seq_id`
 
 const SQLFailedTask = `
 UPDATE tsk_system_task t SET 

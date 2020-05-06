@@ -10,8 +10,9 @@ if not exists tsk_system_seq
 	create_time datetime
 default current_timestamp not null    comment '创建时间',
  KEY `idx_create_time`
-(`create_time`)
-				
+(`create_time`),
+ UNIQUE KEY `unq_name` (`name`)
+
   )COMMENT='### 序列表';
 
  
