@@ -32,14 +32,13 @@ func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
 
 // ClearTask 清除任务
 func ClearTask(db db.IDBExecuter) error {
-
 	return clear(db, sql.SQLClearTask)
 }
 
 // getNewID 获取新ID
 func getNewID(db db.IDBExecuter, SQLGetSEQ string, imap map[string]interface{}) (taskID int64, err error) {
 	id, row, _, _, err := db.Executes(SQLGetSEQ, imap)
-	if err != nil || row != 1 {
+	if err != nil || row < 1 {
 		return 0, fmt.Errorf("获取批次编号失败 %v", err)
 	}
 	return id, nil
