@@ -21,14 +21,27 @@ func (u *RequestHandler) Handle(ctx *context.Context) (r interface{}) {
 	if queueName == "" {
 		queueName = "QTASK:TEST:ORDER-PAY"
 	}
-	_, callback, err := qtask.Create(ctx, "订单支付任务－立即", map[string]interface{}{
-		"order_no": "87698990232",
-	}, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000))
+	db, err := u.container.GetRegularDB().Begin()
 	if err != nil {
 		return err
 	}
+	_, callbacks, err := qtask.Create(db, "task_id", map[string]interface{}{
+		"order_no": "87698990232",
+	}, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000))
+	if err != nil {
+		db.Rollback()
+		return err
+	}
+	// _, callback, err := qtask.Create(db, "task_id", map[string]interface{}{
+	// 	"order_no": "87698990232",
+	// }, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000))
+	// if err != nil {
+	// 	db.Rollback()
+	// 	return err
+	// }
+	db.Commit()
 
-	if err = callback(ctx); err != nil {
+	if err = callbacks(ctx); err != nil {
 		return err
 	}
 	return "success"

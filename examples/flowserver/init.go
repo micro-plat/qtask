@@ -32,5 +32,5 @@ func init() {
 		Service: "/order/pay",
 	}
 
-	qtask.Bind(app, 10)
+	qtask.Bind(app, 1)
 }
