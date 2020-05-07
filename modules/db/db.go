@@ -63,7 +63,7 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 	imap["queue_name"] = mq
 
 	//保存任务信息
-	row, s, p, err := db.Execute(sql.SQLCreateTaskID, imap)
+	row, s, p, err := db.Execute(sql.SQLCreateTask, imap)
 	if err != nil || row != 1 {
 		return 0, fmt.Errorf("创建任务(%s)失败 %v %s,%v", name, err, s, p)
 	}

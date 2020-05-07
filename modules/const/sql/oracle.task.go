@@ -6,7 +6,7 @@ const SQLGetSEQ = `select seq_qtask_system_task_id.nextval from dual`
 
 const SQLGetBatch = `select seq_qtask_system_task_batch_id.nextval from dual`
 
-const SQLCreateTaskID = `
+const SQLCreateTask = `
 insert into tsk_system_task
   (task_id,
    name,

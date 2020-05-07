@@ -2,9 +2,11 @@
 
 package sql
 
-const SQLGetSEQ = `replace into tsk_system_seq (name) values (@name)`
+const SQLGetSEQ = `insert into tsk_system_seq (name,create_time) values (@name, now())`
 
-const SQLCreateTaskID = `insert into tsk_system_task
+// const SQLGetSEQ = `SELECT func_get_seq_id(@name)`
+
+const SQLCreateTask = `insert into tsk_system_task
 (task_id,
  name,
  next_execute_time,
@@ -70,3 +72,10 @@ AND (t.max_execute_time < NOW() OR t.count > 5)
 AND t.status IN (20, 30)
 LIMIT 1000
 `
+
+// const SQLClearSEQ = `DELETE
+// FROM
+//   tsk_system_seq
+// WHERE DATE_ADD(create_time, INTERVAL 30 MINUTE) < NOW()`
+
+const SQLClearSEQ = `delete from tsk_system_seq where seq_id=@seq_id`
