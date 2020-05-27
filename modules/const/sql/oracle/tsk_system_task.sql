@@ -31,7 +31,7 @@
 	comment on column tsk_system_task.delete_time is '删除期限';	
 	comment on column tsk_system_task.count is '执行次数';	
 	comment on column tsk_system_task.max_count is '最大执行次数';	
-	comment on column tsk_system_task.order_no is '业务单号';	
+	comment on column tsk_system_task.order_no is '外部业务单号';	
 	comment on column tsk_system_task.status is '状态(20 等待，30 正在,0 已处理,90 处理失败)';	
 	comment on column tsk_system_task.batch_id is '执行批次号';	
 	comment on column tsk_system_task.queue_name is '消息队列';	

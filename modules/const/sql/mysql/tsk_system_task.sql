@@ -11,7 +11,7 @@
 		delete_time DATETIME   COMMENT '删除期限' ,
 		COUNT BIGINT(10) DEFAULT 0 NOT NULL  COMMENT '执行次数' ,
 	    max_count BIGINT(10) DEFAULT 100 NOT NULL  COMMENT '最大执行次数' ,
-		order_no VARCHAR(32)  COMMENT '业务单号' ,
+		order_no VARCHAR(32)  COMMENT '外部业务单号' ,
 		STATUS TINYINT(2)  NOT NULL  COMMENT '状态(20 等待，30 正在,0 已处理,90 处理失败)' ,
 		batch_id BIGINT(20)    COMMENT '执行批次号' ,
 		queue_name VARCHAR(64)  NOT NULL  COMMENT '消息队列' ,

@@ -104,7 +104,7 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 > qtask.WithDeadline  秒数，设置任务执行截止时间,默认为604800(7天)
 > qtask.WithDeleteDeadline 秒数，设置任务删除截止时间,默认为0.如果没有设置该参数,当任务执行成功,删除时间为当前时间,如果未执行成功,删除时间为当前时间加604800(7天),
 > qtask.WithMaxCount 次数，设置任务最多执行次数,默认为100
-> qtask.WithOrderNO 业务单号，设置任务单号,便于查询同一业务单号任务,默认空
+> qtask.WithOrderNO 外部业务单号，设置外部业务单号,便于查询同一业务单号任务,默认空
 
 #### 3. 处理 `GCR:ORDER:BIND`消息
 
