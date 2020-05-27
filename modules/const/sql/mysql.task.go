@@ -4,8 +4,6 @@ package sql
 
 const SQLGetSEQ = `insert into tsk_system_seq (name,create_time) values (@name, now())`
 
-// const SQLGetSEQ = `SELECT func_get_seq_id(@name)`
-
 const SQLCreateTask = `insert into tsk_system_task
 (task_id,
  name,
@@ -14,6 +12,8 @@ const SQLCreateTask = `insert into tsk_system_task
  next_interval,
  delete_interval,
  status,
+ max_count,
+ order_no,
  queue_name,
  msg_content)
 values
@@ -24,6 +24,8 @@ values
  @next_interval,
  @delete_interval,
  20,
+ @max_count,
+ @order_no,
  @queue_name,
  @content)`
 
@@ -35,7 +37,7 @@ t.count=t.count + 1,
 t.last_execute_time=now()
 where t.task_id=@task_id 
 and t.status in(20,30)
-and t.count <= 5`
+and t.count < t.max_count`
 
 const SQLFinishTask = `
 update tsk_system_task t
@@ -51,8 +53,8 @@ t.batch_id=@batch_id,
 t.next_execute_time = date_add(now(),interval t.next_interval second)
 where t.max_execute_time > now() 
 and t.next_execute_time <= now() 
+and t.count < t.max_count
 and t.status in(20,30)
-and t.count <= 5
 limit 1000`
 
 const SQLQueryWaitProcess = `
@@ -67,15 +69,10 @@ const SQLFailedTask = `
 UPDATE tsk_system_task t SET 
 t.delete_time = DATE_ADD(NOW(),INTERVAL CASE WHEN t.delete_interval=0 THEN 604800 ELSE t.delete_interval END SECOND),
 t.status = 90
-WHERE t.max_execute_time > DATE_SUB(NOW(),INTERVAL 2 DAY)
-AND (t.max_execute_time < NOW() OR t.count > 5) 
+WHERE t.max_execute_time > DATE_SUB(NOW(),INTERVAL 7 DAY)
+AND (t.max_execute_time < NOW() OR t.count >= t.max_count) 
 AND t.status IN (20, 30)
 LIMIT 1000
 `
-
-// const SQLClearSEQ = `DELETE
-// FROM
-//   tsk_system_seq
-// WHERE DATE_ADD(create_time, INTERVAL 30 MINUTE) < NOW()`
 
 const SQLClearSEQ = `delete from tsk_system_seq where seq_id=@seq_id`

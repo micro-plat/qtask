@@ -27,7 +27,7 @@ func (u *RequestHandler) Handle(ctx *context.Context) (r interface{}) {
 	}
 	_, callbacks, err := qtask.Create(db, "task_id", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000))
+	}, 300, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000), qtask.WithMaxCount(1), qtask.WithOrderNO("111"))
 	if err != nil {
 		db.Rollback()
 		return err
@@ -53,7 +53,7 @@ func (u *RequestHandler) DelayHandle(ctx *context.Context) (r interface{}) {
 
 	_, err := qtask.Delay(ctx, "订单支付任务－延迟", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, 300, "QTASK:TEST:ORDER-PAY", qtask.WithDeadline(86400), qtask.WithDeleteDeadline(1000))
+	}, 300, 300, "QTASK:TEST:ORDER-PAY", qtask.WithDeadline(86400), qtask.WithDeleteDeadline(1000), qtask.WithOrderNO("111"))
 	if err != nil {
 		return err
 	}

@@ -60,12 +60,13 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 	imap["first_timeout"] = types.DecodeInt(imap["first_timeout"], nil, timeout, imap["first_timeout"])
 	imap["max_timeout"] = types.DecodeInt(imap["max_timeout"], nil, 259200, imap["max_timeout"])
 	imap["delete_interval"] = types.DecodeInt(imap["delete_interval"], nil, 0, imap["delete_interval"])
+	imap["max_count"] = types.DecodeInt(imap["max_count"], nil, 100, imap["max_count"])
 	imap["queue_name"] = mq
 
 	//保存任务信息
-	row, s, p, err := db.Execute(sql.SQLCreateTask, imap)
+	row, _, _, err := db.Execute(sql.SQLCreateTask, imap)
 	if err != nil || row != 1 {
-		return 0, fmt.Errorf("创建任务(%s)失败 %v %s,%v", name, err, s, p)
+		return 0, fmt.Errorf("创建任务(%s)失败 %v", name, err)
 	}
 	return types.GetInt64(taskID), nil
 }

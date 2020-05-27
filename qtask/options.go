@@ -18,3 +18,17 @@ func WithDeleteDeadline(second int) Option {
 		o["delete_interval"] = second
 	}
 }
+
+// WithMaxCount 任务执行最大次数
+func WithMaxCount(count int) Option {
+	return func(o opts) {
+		o["max_count"] = count
+	}
+}
+
+// WithOrderNO 业务单号
+func WithOrderNO(orderNO string) Option {
+	return func(o opts) {
+		o["order_no"] = orderNO
+	}
+}
