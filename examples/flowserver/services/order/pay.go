@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/micro-plat/hydra"
-	"github.com/micro-plat/qtask/qtask"
+	"github.com/micro-plat/qtask"
 )
 
 type PayHandler struct {

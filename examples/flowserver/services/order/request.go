@@ -2,8 +2,7 @@ package order
 
 import (
 	"github.com/micro-plat/hydra"
-	"github.com/micro-plat/qtask/modules/const/conf"
-	"github.com/micro-plat/qtask/qtask"
+	"github.com/micro-plat/qtask"
 )
 
 type RequestHandler struct {
@@ -20,7 +19,7 @@ func (u *RequestHandler) Handle(ctx hydra.IContext) (r interface{}) {
 	if queueName == "" {
 		queueName = "QTASK:TEST:ORDER-PAY"
 	}
-	db, err := hydra.C.DB().GetRegularDB(conf.DBName).Begin()
+	db, err := hydra.C.DB().GetRegularDB(qtask.GetDBName()).Begin()
 	if err != nil {
 		return err
 	}
