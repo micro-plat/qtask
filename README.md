@@ -85,7 +85,11 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ###  2. 添加、注册任务
 
 ```go
-	hydra.Conf.MQC(mqc.WithRedis("queue")).Queue(queue.NewQueue("ORDER:BIND", "/order/pay"))
+    //处理ORDER:BIND队列消息
+    hydra.Conf.MQC(mqc.WithRedis("queue")).Queue(queue.NewQueue("ORDER:BIND", "/order/bind"))
+
+    //注册/order/bind服务
+    hydra.S.CRON("/order/bind", OrderBind)     //业务处理服务
 ```
 
 ### 3. 编写处理代码
@@ -112,7 +116,7 @@ func OrderBind(ctx hydra.IContext) (r interface{}) {
 
 ## 三、创建数据表
 
-以当前引用了qtask包的应用名为`flowserver`为例：
+当前应用`flowserver`中引用了qtask：
 
 ```sh
 :~/work/bin$ flowserver db install --debug
