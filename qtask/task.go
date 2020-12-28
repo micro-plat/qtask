@@ -1,12 +1,9 @@
 package qtask
 
 import (
-	"fmt"
-
-	"github.com/micro-plat/hydra/component"
-	"github.com/micro-plat/hydra/context"
+	"github.com/micro-plat/hydra"
+	"github.com/micro-plat/hydra/components/queues"
 	ldb "github.com/micro-plat/lib4go/db"
-	"github.com/micro-plat/lib4go/queue"
 	"github.com/micro-plat/qtask/modules/const/conf"
 	"github.com/micro-plat/qtask/modules/db"
 )
@@ -119,29 +116,20 @@ func getTrans(c interface{}) (bool, ldb.IDBTrans, error) {
 //---------------------------------内部函数-----------------------------------
 func getDB(c interface{}) (bool, ldb.IDBExecuter, error) {
 	switch v := c.(type) {
-	case *context.Context:
-		db, err := v.GetContainer().GetDB(conf.DBName)
-		return false, db, err
-	case component.IContainer:
-		db, err := v.GetDB(conf.DBName)
-		return false, db, err
 	case ldb.IDB:
 		return false, v, nil
 	case ldb.IDBTrans:
 		return true, v, nil
 	default:
-		return false, nil, fmt.Errorf("不支持的参数类型")
+		db, err := hydra.C.DB().GetDB(conf.DBName)
+		return false, db, err
 	}
 }
-func getQueue(c interface{}) (db queue.IQueue, err error) {
+func getQueue(c interface{}) (db queues.IQueue, err error) {
 	switch v := c.(type) {
-	case *context.Context:
-		return v.GetContainer().GetQueue(conf.QueueName)
-	case component.IContainer:
-		return v.GetQueue(conf.QueueName)
-	case queue.IQueue:
+	case queues.IQueue:
 		return v, nil
 	default:
-		return nil, fmt.Errorf("不支持的参数类型")
+		return hydra.C.Queue().GetQueue(conf.QueueName)
 	}
 }

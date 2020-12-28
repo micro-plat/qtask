@@ -112,7 +112,7 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 
 ```go
 
-func OrderBind(ctx *context.Context) (r interface{}) {
+func OrderBind(ctx hydra.IContext) (r interface{}) {
     //检查输入参数...
 
     //业务处理前调用，修改任务状态为处理中(超时前未调用qtask.Finish，任务会被重新放入队列)

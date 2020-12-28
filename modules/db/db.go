@@ -3,8 +3,8 @@ package db
 import (
 	"fmt"
 
-	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/lib4go/db"
+	"github.com/micro-plat/lib4go/errs"
 	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/modules/const/sql"
@@ -79,7 +79,7 @@ func ClearTask(db db.IDBExecuter) error {
 		return fmt.Errorf("清理任务失败 %v", err)
 	}
 	if rows == 0 {
-		return context.NewError(204, "无需清理")
+		return errs.NewError(204, "无需清理")
 	}
 	return nil
 }
@@ -103,7 +103,7 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 		return 0, nil, fmt.Errorf("修改任务批次失败 %v", err)
 	}
 	if row == 0 {
-		return 0, nil, context.NewError(204, "未查询到待处理任务")
+		return 0, nil, errs.NewError(204, "未查询到待处理任务")
 	}
 	rows, _, _, err = db.Query(SQLQueryWaitProcess, imap)
 	if err != nil {

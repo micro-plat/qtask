@@ -4,27 +4,22 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/micro-plat/hydra/conf"
-	"github.com/micro-plat/hydra/hydra"
-	"github.com/micro-plat/lib4go/types"
+	"github.com/micro-plat/hydra"
+	"github.com/micro-plat/qtask/modules/const/conf"
 	"github.com/micro-plat/qtask/services"
 )
 
 var once sync.Once
 
-//Bind 绑定服务
-//注册 /task/scan 为cron
-//注册 /task/clear 为cron
-func Bind(app *hydra.MicroApp, scanSecond int) {
+func init() {
 	once.Do(func() {
-		if scanSecond >= 60 {
-			panic(fmt.Sprintf("qtask.bind　扫描时间取值为0-59,当前值:%d", scanSecond))
-		}
-		scanSecond = types.GetMax(scanSecond, 0)
-		ch := app.GetDynamicCron()
-		ch <- &conf.Task{Cron: fmt.Sprintf("@every %ds", scanSecond), Engine: "*", Service: "/task/scan"}
-		ch <- &conf.Task{Cron: "@daily", Engine: "*", Service: "/task/clear"}
-		app.CRON("/task/scan", services.Scan)     //定时扫描任务
-		app.CRON("/task/clear", services.Clear()) //定时清理任务
+
+		hydra.S.CRON("/task/scan", services.Scan)     //定时扫描任务
+		hydra.S.CRON("/task/clear", services.Clear()) //定时清理任务
+
+		hydra.CRON.Add(fmt.Sprintf("@every %ds", conf.ScanInterval), "/task/scan")
+		hydra.CRON.Add("@daily", "/task/clear")
+
 	})
+
 }

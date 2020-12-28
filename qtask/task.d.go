@@ -35,7 +35,7 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 			if err != nil {
 				return err
 			}
-			return queue.Push(mq, string(buff))
+			return queue.Send(mq, string(buff))
 		}
 	}
 	return taskID, fcallback(&input), nil

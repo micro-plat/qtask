@@ -6,8 +6,5 @@ var DBName = "db"
 // QueueName 队列名称
 var QueueName = "queue"
 
-// Config 配置数据库，消息队列的配置名称
-func Config(db string, mq string) {
-	DBName = db
-	QueueName = mq
-}
+//ScanInterval 扫描时长秒
+var ScanInterval = 5
