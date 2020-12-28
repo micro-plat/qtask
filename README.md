@@ -133,8 +133,7 @@ func OrderBind(ctx hydra.IContext) (r interface{}) {
 
 ```go
 qtask.Config(qtask.WithDBName("oracle"), //数据库配置
-    qtask.WithQueueName("redis"), //队列配置
-    qtask.WithScanInterval(2)) //DB拉取时间
+    qtask.WithQueueName("redis")) //队列配置
 ```
 
 ### 2. 数据库
