@@ -1,12 +1,9 @@
 package qtask
 
 import (
-	"fmt"
-
 	"github.com/micro-plat/hydra"
 	"github.com/micro-plat/hydra/components/queues"
 	ldb "github.com/micro-plat/lib4go/db"
-	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
 	"github.com/micro-plat/qtask/internal/modules/db"
 )
@@ -66,15 +63,11 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 
 	fcallback := func(input *map[string]interface{}) func(c interface{}) error {
 		return func(c interface{}) error {
-			buff, err := jsons.Marshal(*input)
-			if err != nil {
-				return fmt.Errorf("任务输入参数转换为json失败:%v(%+v)", err, *input)
-			}
 			queue, err := getQueue(c)
 			if err != nil {
 				return err
 			}
-			return queue.Send(mq, string(buff))
+			return queue.Send(mq, input)
 		}
 	}
 	return taskID, fcallback(&input), nil

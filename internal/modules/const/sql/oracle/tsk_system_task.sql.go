@@ -1,6 +1,6 @@
 package oracle
 
-var tsk_system_task = `create table tsk_system_task(
+const tsk_system_task = `create table tsk_system_task(
 		task_id number(20)  not null ,
 		name varchar2(32)  not null ,
 		create_time date default sysdate not null ,

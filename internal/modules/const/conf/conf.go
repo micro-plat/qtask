@@ -7,4 +7,4 @@ var DBName = "db"
 var QueueName = "queue"
 
 //ScanInterval 扫描时长秒
-var ScanInterval = 5
+var ScanInterval = 3
