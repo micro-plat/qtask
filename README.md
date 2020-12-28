@@ -85,7 +85,7 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ###  2. 添加、注册任务
 
 ```go
-    //处理ORDER:BIND队列消息
+    //添加队列ORDER:BIND的处理任务
     hydra.Conf.MQC(mqc.WithRedis("queue")).Queue(queue.NewQueue("ORDER:BIND", "/order/bind"))
 
     //注册/order/bind服务
