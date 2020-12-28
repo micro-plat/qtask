@@ -132,6 +132,8 @@ func OrderBind(ctx hydra.IContext) (r interface{}) {
 ### 1. 配置
 
 ```go
+import "github.com/micro-plat/qtask"
+
 qtask.Config(qtask.WithDBName("oracle"), //数据库配置
     qtask.WithQueueName("redis")) //队列配置
 ```
