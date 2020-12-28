@@ -30,7 +30,7 @@ func Create(c interface{}, taskName string, input map[string]interface{}, interv
 }
 
 //Delay 创建延迟任务，将任务信息保存到数据库，超时后将任务取出放到消息队列
-//c:*context.Context,component.IContainer,db.IDBExecuter,db.IDBTrans
+//c:hydra.IContext,db.IDBExecuter,db.IDBTrans
 //taskName:任务名称
 //input:任务关健参数，序列化为json后存储，一般只允许传入关键参数。系统会在此输入参数中增加一个参数"task_id",业务流程需使用"task_id"修改任务为处理中或完结任务
 // 首次执行时间
@@ -55,7 +55,8 @@ func Delay(c interface{}, taskName string, input map[string]interface{}, firstTi
 
 }
 
-//Processing 将任务修改为处理中。系统自动延时，并累加任务处理次数
+//Processing 将任务修改为处理中。可以不调用，直接调用Finish完结任务，
+//调用后系统自动延时，并累加任务处理次数
 //任务被正式处理前调用此函数
 //调用后当下次执行时间小于当前时间后会重新放入消息队列进行处理
 func Processing(c interface{}, taskID int64) error {
