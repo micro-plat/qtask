@@ -68,10 +68,10 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 ```
 
 ### 3.参数说明
-* qtask.WithDeadline  秒数，设置任务执行截止时间,默认为604800(7天)
-* qtask.WithDeleteDeadline 秒数，设置任务删除截止时间,默认为0.如果没有设置该参数,当任务执行成功,删除时间为当前时间,如果未执行成功,删除时间为当前时间加604800(7天),
-* qtask.WithMaxCount 次数，设置任务最多执行次数,默认为100
-* qtask.WithOrderNO 外部业务单号，设置外部业务单号,便于查询同一业务单号任务,默认空
+* qtask.WithDeadline 任务截止执行时间,单位：秒，默认值604800秒(7天)
+* qtask.WithDeleteDeadline任务删除截止时间，单位：秒。未设置时,任务执行成功立即删除;未执行成功,则为任务添加后的604800秒(7天)
+* qtask.WithMaxCount 任务最多执行次数,默认为100
+* qtask.WithOrderNO 外部业务单号
 
 
 ## 二. 处理任务
