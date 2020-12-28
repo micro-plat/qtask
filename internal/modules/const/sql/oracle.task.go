@@ -2,7 +2,7 @@
 
 package sql
 
-import _ "github.com/micro-plat/qtask/modules/const/sql/oracle"
+import _ "github.com/micro-plat/qtask/internal/modules/const/sql/oracle"
 
 const SQLGetSEQ = `select seq_qtask_system_task_id.nextval from dual`
 
