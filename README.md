@@ -39,6 +39,8 @@
 
 ```go
 
+import "github.com/micro-plat/qtask"
+
 // 创建实时任务，将任务放入指定的消息队列，并备份到DB
 // taskID:任务编号
 // invoke:执行函数句柄
@@ -54,6 +56,10 @@ err:=invoke(c)
 ### 2.延迟任务
 
 ```go
+
+import "github.com/micro-plat/qtask"
+
+
 //创建延时任务，将任务保存到数据库(状态为等待处理),超时后放入消息队列
 // taskID:任务编号
 taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
@@ -84,6 +90,9 @@ taskID, err:=qtask.Delay(c,"订单绑定任务",map[string]interface{}{
 
 ### 3. 编写处理代码
 ```go
+
+import "github.com/micro-plat/qtask"
+
 
 func OrderBind(ctx hydra.IContext) (r interface{}) {
     //检查输入参数...
