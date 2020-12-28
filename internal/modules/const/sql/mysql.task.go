@@ -2,7 +2,7 @@
 
 package sql
 
-import _ "github.com/micro-plat/qtask/modules/const/sql/mysql"
+import _ "github.com/micro-plat/qtask/internal/modules/const/sql/mysql"
 
 const SQLGetSEQ = `insert into tsk_system_seq (name,create_time) values (@name, now())`
 

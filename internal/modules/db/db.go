@@ -7,7 +7,7 @@ import (
 	"github.com/micro-plat/lib4go/errs"
 	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/lib4go/types"
-	"github.com/micro-plat/qtask/modules/const/sql"
+	"github.com/micro-plat/qtask/internal/modules/const/sql"
 )
 
 // Processing 开始处理任务

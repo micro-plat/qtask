@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/micro-plat/lib4go/db"
-	"github.com/micro-plat/qtask/modules/const/sql"
+	"github.com/micro-plat/qtask/internal/modules/const/sql"
 )
 
 // getNewID 获取新ID
