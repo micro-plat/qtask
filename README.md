@@ -110,7 +110,20 @@ func OrderBind(ctx hydra.IContext) (r interface{}) {
 
 ```
 
-## 三、其它
+## 三、创建数据表
+
+以当前引用了qtask包的应用名为`flowserver`为例：
+
+```sh
+:~/work/bin$ flowserver db install --debug
+安装到数据库 					[OK]
+```
+
+查看数据库，则已创建好qtask所需的数据表(mysql:2张表,oracle:1张表)
+
+
+
+## 四、其它
 
 ### 1. 配置
 
