@@ -102,14 +102,14 @@ func OrderBind(ctx hydra.IContext) (r interface{}) {
     //检查输入参数...
 
     //业务处理前调用，修改任务状态为处理中(超时前未调用qtask.Finish，任务会被重新放入队列)
-    qtask.Processing(ctx,ctx.Request.GetInt64("task_id"))
+    qtask.Processing(ctx,ctx.Request().GetInt64("task_id"))
 
 
     //处理业务逻辑...
 
 
     //业务处理成功，修改任务状态为完成(任务不再放入队列),并修改删除截止时间
-    qtask.Finish(ctx,ctx.Request.GetInt64("task_id"))
+    qtask.Finish(ctx,ctx.Request().GetInt64("task_id"))
 }
 
 ```
