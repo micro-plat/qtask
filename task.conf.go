@@ -6,7 +6,7 @@ import (
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
 )
 
-// Config 配置数据库，消息队列的配置名称
+// Config 配置数据库，消息队列的配置名称,请通过hydra.OnReadyByInsert修改配置参数
 func Config(opts ...ConfOption) {
 	for _, opt := range opts {
 		opt()

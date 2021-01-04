@@ -68,14 +68,14 @@ const JWTName = "Authorization-Jwt"
 
 //JWTAuth jwt配置信息
 type JWTAuth struct {
-	Name            string   `json:"name,omitempty" valid:"ascii,required" toml:"name,omitempty"`
-	ExpireAt        int64    `json:"expireAt,omitzero" valid:"required" toml:"expireAt,omitzero"`
-	Mode            string   `json:"mode,omitempty" valid:"in(HS256|HS384|HS512|RS256|ES256|ES384|ES512|RS384|RS512|PS256|PS384|PS512),required" toml:"mode,omitempty"`
-	Secret          string   `json:"secret,omitempty" valid:"ascii,required" toml:"secret,omitempty"`
-	Source          string   `json:"source,omitempty" valid:"in(header|cookie|HEADER|COOKIE|H)" toml:"source,omitempty"`
+	Name            string   `json:"name,omitempty" valid:"ascii,required" toml:"name,omitempty" label:"jwt名称"`
+	ExpireAt        int64    `json:"expireAt,omitzero" valid:"required" toml:"expireAt,omitzero" label:"jwt过期时间"`
+	Mode            string   `json:"mode,omitempty" valid:"in(HS256|HS384|HS512|RS256|ES256|ES384|ES512|RS384|RS512|PS256|PS384|PS512),required" toml:"mode,omitempty" label:"jwt认证方式"`
+	Secret          string   `json:"secret,omitempty" valid:"ascii,required" toml:"secret,omitempty"  label:"jwt密钥"`
+	Source          string   `json:"source,omitempty" valid:"in(header|cookie|HEADER|COOKIE|H)" toml:"source,omitempty" label:"jwt存储方式"`
 	Excludes        []string `json:"excludes,omitempty" toml:"exclude,omitempty"`
 	Domain          string   `json:"domain,omitempty" toml:"domain,omitempty"`
-	AuthURL         string   `json:"authURL,omitempty" valid:"ascii" toml:"authURL,omitempty"`
+	AuthURL         string   `json:"authURL,omitempty" valid:"ascii" toml:"authURL,omitempty" label:"jwt认证跳转地址"`
 	Disable         bool     `json:"disable,omitempty" toml:"disable,omitempty"`
 	*conf.PathMatch `json:"-"`
 }
@@ -99,7 +99,7 @@ func NewJWT(opts ...Option) *JWTAuth {
 //CheckJWT 检查jwt合法性
 func (j *JWTAuth) CheckJWT(token string) (data interface{}, err error) {
 	if token == "" {
-		return nil, errs.NewError(JWTStatusTokenNotExsit, fmt.Errorf("未传入jwt.token(%s %s值为空)", j.Source, j.Name))
+		return nil, errs.NewError(JWTStatusTokenError, fmt.Errorf("未传入jwt.token(%s %s值为空)", j.Source, j.Name))
 	}
 	//2. 解密jwt判断是否有效，是否过期
 	data, er := jwt.Decrypt(token, j.Secret)

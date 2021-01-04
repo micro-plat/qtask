@@ -50,7 +50,8 @@ func NewCtx(c context.IInnerContext, tp string) *Ctx {
 	if err != nil {
 		panic(err)
 	}
-	ctx.user = NewUser(c, context.Cache(ctx), ctx.meta)
+	ctx.user = NewUser(c, ctx.meta)
+	context.Cache(ctx)
 	ctx.request = NewRequest(c, ctx.appConf, ctx.meta)
 	ctx.log = logger.GetSession(ctx.appConf.GetServerConf().GetServerName(), ctx.User().GetRequestID())
 	ctx.response = NewResponse(c, ctx.appConf, ctx.log, ctx.meta)
@@ -119,7 +120,7 @@ func (c *Ctx) Invoke(service string) interface{} {
 
 //Close 关闭并释放所有资源
 func (c *Ctx) Close() {
-	context.Del(c.user.gid) //从当前请求上下文中删除
+	context.Del() //从当前请求上下文中删除
 	c.appConf = nil
 	c.cancelFunc()
 	c.cancelFunc = nil
