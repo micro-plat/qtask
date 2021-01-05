@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/lib4dev/cli/cmds"
 	logs "github.com/lib4dev/cli/logger"
@@ -70,9 +71,16 @@ func install(c *cli.Context) (err error) {
 			return err
 		}
 		for _, sql := range sqls {
-			if _, _, _, err := db.Execute(sql, nil); !skip && err != nil {
-				return err
+			if _, err := db.Execute(sql, nil); err != nil {
+				err = fmt.Errorf("%32s\t%w", getMessage(sql), err)
+				if !skip {
+					return err
+				}
+				logs.Log.Error(err, compatible.FAILED)
+				continue
 			}
+			msg := fmt.Sprintf("%32s", getMessage(sql))
+			logs.Log.Info(msg, compatible.SUCCESS)
 		}
 	}
 
@@ -89,5 +97,15 @@ func logNow(err error) {
 		logs.Log.Error(err, compatible.FAILED)
 		return
 	}
-	logs.Log.Error("安装到数据库", compatible.SUCCESS)
 }
+func getMessage(input string) string {
+	raw := input[:types.GetMin(32, len(input))]
+	regx := regexp.MustCompile("[^\\(\\[]+")
+	nstr := regx.FindString(raw)
+	return nstr
+}
+
+/*
+raw := input[:types.GetMin(32, len(input))]
+	return strings.TrimSpace(strings.Replace(raw, "\n" "", -1))
+*/

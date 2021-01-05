@@ -15,7 +15,7 @@ func Processing(db db.IDBExecuter, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,
 	}
-	row, _, _, err := db.Execute(sql.SQLProcessingTask, imap)
+	row, err := db.Execute(sql.SQLProcessingTask, imap)
 	if err != nil || row != 1 {
 		return fmt.Errorf("修改任务为处理中(%d)失败 %v", taskID, err)
 	}
@@ -27,7 +27,7 @@ func Finish(db db.IDBExecuter, taskID int64) error {
 	imap := map[string]interface{}{
 		"task_id": taskID,
 	}
-	_, _, _, err := db.Execute(sql.SQLFinishTask, imap)
+	_, err := db.Execute(sql.SQLFinishTask, imap)
 	if err != nil {
 		return fmt.Errorf("关闭任务(%d)失败 %v", taskID, err)
 	}
@@ -64,7 +64,7 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 	imap["queue_name"] = mq
 
 	//保存任务信息
-	row, _, _, err := db.Execute(sql.SQLCreateTask, imap)
+	row, err := db.Execute(sql.SQLCreateTask, imap)
 	if err != nil || row != 1 {
 		return 0, fmt.Errorf("创建任务(%s)失败 %v", name, err)
 	}
@@ -74,7 +74,7 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 // ClearTask 清除任务
 func ClearTask(db db.IDBExecuter) error {
 
-	rows, _, _, err := db.Execute(sql.SQLClearTask, nil)
+	rows, err := db.Execute(sql.SQLClearTask, nil)
 	if err != nil {
 		return fmt.Errorf("清理任务失败 %v", err)
 	}
@@ -98,14 +98,14 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 
 	imap["batch_id"] = batchID
 
-	row, _, _, err := db.Execute(SQLUpdateTask, imap)
+	row, err := db.Execute(SQLUpdateTask, imap)
 	if err != nil {
 		return 0, nil, fmt.Errorf("修改任务批次失败 %v", err)
 	}
 	if row == 0 {
 		return 0, nil, errs.NewError(204, "未查询到待处理任务")
 	}
-	rows, _, _, err = db.Query(SQLQueryWaitProcess, imap)
+	rows, err = db.Query(SQLQueryWaitProcess, imap)
 	if err != nil {
 		return 0, nil, fmt.Errorf("根据批次查询任务失败 %v", err)
 	}
@@ -114,7 +114,7 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 
 // failedTasks 失败任务处理
 func failedTasks(db db.IDBExecuter, SQLFailedTask string) error {
-	_, _, _, err := db.Execute(SQLFailedTask, nil)
+	_, err := db.Execute(SQLFailedTask, nil)
 	if err != nil {
 		return fmt.Errorf("修改失败任务批次发生异常,err:%v", err)
 	}
