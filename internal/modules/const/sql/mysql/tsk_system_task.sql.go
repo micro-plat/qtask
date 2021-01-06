@@ -2,7 +2,7 @@ package mysql
 
 const tsk_system_task = `
 DROP TABLE IF EXISTS tsk_system_task;
-CREATE TABLE if not exists tsk_system_task (
+CREATE TABLE IF NOT EXISTS tsk_system_task (
 		task_id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '编号' ,
 		NAME VARCHAR(32)  NOT NULL  COMMENT '名称' ,
 		create_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL  COMMENT '创建时间' ,

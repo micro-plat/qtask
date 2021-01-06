@@ -2,7 +2,7 @@ package mysql
 
 const tsk_system_seq = `
 DROP TABLE IF EXISTS tsk_system_seq;
-create table if not exists tsk_system_seq
+CREATE TABLE IF NOT EXISTS tsk_system_seq
 (
 	seq_id bigint not null PRIMARY KEY AUTO_INCREMENT comment '编号',
 	name varchar(32)  not null    comment '名称',
