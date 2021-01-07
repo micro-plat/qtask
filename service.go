@@ -14,11 +14,8 @@ var once sync.Once
 func init() {
 	hydra.OnReady(func() {
 		once.Do(func() {
-			hydra.S.CRON("/task/scan", services.Scan)     //定时扫描任务
-			hydra.S.CRON("/task/clear", services.Clear()) //定时清理任务
-
-			hydra.CRON.Add(fmt.Sprintf("@every %ds", conf.ScanInterval), "/task/scan")
-			hydra.CRON.Add("@daily", "/task/clear")
+			hydra.S.CRON("/task/scan", services.Scan, fmt.Sprintf("@every %ds", conf.ScanInterval)) //定时扫描任务
+			hydra.S.CRON("/task/clear", services.Clear(), "@daily")                                 //定时清理任务
 		})
 	})
 

@@ -25,7 +25,7 @@ func (u *RequestHandler) Handle(ctx hydra.IContext) (r interface{}) {
 	}
 	_, callbacks, err := qtask.Create(db, "task_id", map[string]interface{}{
 		"order_no": "87698990232",
-	}, 300, global.MQConf.GetQueueName(queueName), qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000), qtask.WithMaxCount(1), qtask.WithOrderNO("111"))
+	}, 60, queueName, qtask.WithDeadline(1000), qtask.WithDeleteDeadline(1000), qtask.WithMaxCount(100), qtask.WithOrderNO("111"))
 	if err != nil {
 		db.Rollback()
 		return err
