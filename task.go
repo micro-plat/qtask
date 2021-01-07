@@ -1,6 +1,7 @@
 package qtask
 
 import (
+	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/internal/modules/db"
 )
 
@@ -55,6 +56,14 @@ func Delay(c interface{}, taskName string, input map[string]interface{}, firstTi
 
 }
 
+//ProcessingByInput 将任务修改为处理中。可以不调用，直接调用Finish完结任务，
+//调用后系统自动延时，并累加任务处理次数
+//任务被正式处理前调用此函数
+//调用后当下次执行时间小于当前时间后会重新放入消息队列进行处理
+func ProcessingByInput(c interface{}, input types.IXMap) error {
+	return Processing(c, input.GetInt64("task_id"))
+}
+
 //Processing 将任务修改为处理中。可以不调用，直接调用Finish完结任务，
 //调用后系统自动延时，并累加任务处理次数
 //任务被正式处理前调用此函数
@@ -74,6 +83,12 @@ func Processing(c interface{}, taskID int64) error {
 	}
 	xdb.Commit()
 	return nil
+}
+
+//FinishByInput 任务完成
+//任务终结，不再放入消息队列
+func FinishByInput(c interface{}, input types.IXMap) error {
+	return Finish(c, input.GetInt64("task_id"))
 }
 
 //Finish 任务完成
