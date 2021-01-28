@@ -54,10 +54,3 @@ func WithQueueName(queueName string) ConfOption {
 		conf.QueueName = queueName
 	}
 }
-
-// WithDisableAutoFlow 消息队列节点名称
-func WithDisableAutoFlow() ConfOption {
-	return func() {
-		conf.DisableAutoFlow = true
-	}
-}
