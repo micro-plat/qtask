@@ -14,6 +14,9 @@ var once sync.Once
 func init() {
 	hydra.OnReady(func() {
 		once.Do(func() {
+			if conf.DisableAutoFlow {
+				return
+			}
 			hydra.S.CRON("/task/scan", services.Scan, fmt.Sprintf("@every %ds", conf.ScanInterval)) //定时扫描任务
 			hydra.S.CRON("/task/clear", services.Clear(), "@daily")                                 //定时清理任务
 		})
