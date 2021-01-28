@@ -15,9 +15,12 @@ func getNewID(db db.IDBExecuter, SQLGetSEQ string, imap map[string]interface{}) 
 	if err != nil || row < 1 {
 		return 0, fmt.Errorf("获取批次编号失败 %v", err)
 	}
-	_, err = db.Execute(sql.SQLClearSEQ, map[string]interface{}{"seq_id": id})
-	if err != nil || row < 1 {
-		return 0, fmt.Errorf("清理序列数据失败%v", err)
+
+	if id%1000 == 100 {
+		_, err = db.Execute(sql.SQLClearSEQ, map[string]interface{}{"seq_id": id})
+		if err != nil {
+			return 0, fmt.Errorf("清理序列数据失败%v", err)
+		}
 	}
 	return id, nil
 }

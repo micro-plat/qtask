@@ -77,4 +77,4 @@ AND t.status IN (20, 30)
 LIMIT 1000
 `
 
-const SQLClearSEQ = `delete from tsk_system_seq where seq_id=@seq_id`
+const SQLClearSEQ = `delete from tsk_system_seq where seq_id < @seq_id`
