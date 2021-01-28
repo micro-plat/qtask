@@ -11,7 +11,7 @@ import (
 
 // getNewID 获取新ID
 func getNewID(db db.IDBExecuter, SQLGetSEQ string, imap map[string]interface{}) (taskID int64, err error) {
-	id, _, _, err := db.Scalar(SQLGetSEQ, imap)
+	id, err := db.Scalar(SQLGetSEQ, imap)
 	if err != nil {
 		return 0, fmt.Errorf("获取任务(%-s)编号失败 %v", imap, err)
 	}
