@@ -98,7 +98,7 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 	}
 
 	imap["batch_id"] = batchID
-	imap["plat_name"] = conf.GetPlatName
+	imap["plat_name"] = conf.GetPlatName()
 
 	row, err := db.Execute(SQLUpdateTask, imap)
 	if err != nil {

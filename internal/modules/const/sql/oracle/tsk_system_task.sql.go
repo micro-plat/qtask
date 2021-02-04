@@ -3,6 +3,7 @@ package oracle
 const tsk_system_task = `create table tsk_system_task(
 		task_id number(20)  not null ,
 		name varchar2(32)  not null ,
+		plat_name VARCHAR(32)  NOT NULL,
 		create_time date default sysdate not null ,
 		last_execute_time date   ,
 		next_execute_time date  not null ,
@@ -22,7 +23,8 @@ const tsk_system_task = `create table tsk_system_task(
 
 	comment on table tsk_system_task is '任务表';
 	comment on column tsk_system_task.task_id is '编号';	
-	comment on column tsk_system_task.name is '名称';	
+	comment on column tsk_system_task.name is '名称';
+	comment on column tsk_system_task.plat_name is '平台名称';	
 	comment on column tsk_system_task.create_time is '创建时间';	
 	comment on column tsk_system_task.last_execute_time is '上次执行时间';	
 	comment on column tsk_system_task.next_execute_time is '下次执行时间';	

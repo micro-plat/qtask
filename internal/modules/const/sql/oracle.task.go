@@ -12,6 +12,7 @@ const SQLCreateTask = `
 insert into tsk_system_task
   (task_id,
    name,
+   plat_name,
    next_execute_time,
    max_execute_time,
    next_interval,
@@ -24,6 +25,7 @@ insert into tsk_system_task
 values
   (@task_id,
    @name,
+   @plat_name,
    sysdate + #first_timeout / 24 / 60 / 60,
    sysdate + #max_timeout / 24 / 60 / 60,
    @next_interval,
@@ -61,6 +63,7 @@ t.next_execute_time= sysdate+t.next_interval/24/60/60
 where  t.max_execute_time > sysdate
 and t.next_execute_time <= sysdate 
 and t.status in(20,30) 
+and t.plat_name = @plat_name
 and t.count < t.max_count
 and rownum <= 1000`
 
