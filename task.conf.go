@@ -3,6 +3,8 @@ package qtask
 import (
 	"fmt"
 
+	"github.com/micro-plat/hydra"
+	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
 )
 
@@ -26,6 +28,11 @@ func GetQueueName() string {
 //GetScanInterval 获取已配置的tScanInterval
 func GetScanInterval() int {
 	return conf.ScanInterval
+}
+
+//GetPlatName 获取队列对应的平台名称
+func GetPlatName() string {
+	return types.GetString(conf.PlatName, hydra.G.PlatName)
 }
 
 //ConfOption 配置选项
@@ -52,5 +59,12 @@ func WithDBName(dbName string) ConfOption {
 func WithQueueName(queueName string) ConfOption {
 	return func() {
 		conf.QueueName = queueName
+	}
+}
+
+// WithPlatName 设置消息队列对应平台的名称
+func WithPlatName(platName string) ConfOption {
+	return func() {
+		conf.PlatName = platName
 	}
 }

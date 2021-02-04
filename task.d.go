@@ -48,6 +48,7 @@ func create(xdb ldb.IDBExecuter, c interface{}, name string,
 	input map[string]interface{}, intervalTimeout int, mq string, opts ...Option) (taskID int64, callback func(c interface{}) error, err error) {
 
 	args := make(map[string]interface{})
+	args["plat_name"] = GetPlatName()
 	for _, opt := range opts {
 		opt(args)
 	}
@@ -80,5 +81,6 @@ func delay(xdb ldb.IDBExecuter, c interface{}, name string, input map[string]int
 		opt(args)
 	}
 	args["first_timeout"] = firstTime
+	args["plat_name"] = GetPlatName()
 	return db.SaveTask(xdb, name, input, intervalTimeout, mq, args)
 }

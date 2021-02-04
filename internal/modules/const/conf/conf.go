@@ -6,5 +6,8 @@ var DBName = "db"
 // QueueName 队列名称
 var QueueName = "queue"
 
+//PlatName 平台名称
+var PlatName = ""
+
 //ScanInterval 扫描时长秒
 var ScanInterval = 3

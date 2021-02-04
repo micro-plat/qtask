@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS tsk_system_task;
 CREATE TABLE IF NOT EXISTS tsk_system_task (
 		task_id BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '编号' ,
 		NAME VARCHAR(32)  NOT NULL  COMMENT '名称' ,
+		plat_name VARCHAR(32)  NOT NULL  COMMENT '平台名称' ,
 		create_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL  COMMENT '创建时间' ,
 		last_execute_time DATETIME    COMMENT '上次执行时间' ,
 		next_execute_time DATETIME  NOT NULL  COMMENT '下次执行时间' ,
