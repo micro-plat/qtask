@@ -7,6 +7,7 @@ import (
 	"github.com/micro-plat/lib4go/errs"
 	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/lib4go/types"
+	"github.com/micro-plat/qtask/internal/modules/const/conf"
 	"github.com/micro-plat/qtask/internal/modules/const/sql"
 )
 
@@ -62,7 +63,7 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 	imap["delete_interval"] = types.DecodeInt(imap["delete_interval"], nil, 0, imap["delete_interval"])
 	imap["max_count"] = types.DecodeInt(imap["max_count"], nil, 100, imap["max_count"])
 	imap["queue_name"] = mq
-
+	imap["plat_name"] = conf.GetPlatName()
 	//保存任务信息
 	row, err := db.Execute(sql.SQLCreateTask, imap)
 	if err != nil || row != 1 {
@@ -97,6 +98,7 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 	}
 
 	imap["batch_id"] = batchID
+	imap["plat_name"] = conf.GetPlatName
 
 	row, err := db.Execute(SQLUpdateTask, imap)
 	if err != nil {

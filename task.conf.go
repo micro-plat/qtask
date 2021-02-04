@@ -3,8 +3,6 @@ package qtask
 import (
 	"fmt"
 
-	"github.com/micro-plat/hydra"
-	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
 )
 
@@ -32,7 +30,7 @@ func GetScanInterval() int {
 
 //GetPlatName 获取队列对应的平台名称
 func GetPlatName() string {
-	return types.GetString(conf.PlatName, hydra.G.PlatName)
+	return conf.GetPlatName()
 }
 
 //ConfOption 配置选项

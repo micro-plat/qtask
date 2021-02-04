@@ -58,6 +58,7 @@ t.next_execute_time = date_add(now(),interval t.next_interval second)
 where t.max_execute_time > now() 
 and t.next_execute_time <= now() 
 and t.count < t.max_count
+and t.plat_name = @plat_name
 and t.status in(20,30)
 limit 1000`
 
