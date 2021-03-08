@@ -12,7 +12,7 @@ import (
 //upgrader 处理ws请求
 
 //WSExecuteHandler 业务处理Handler
-func WSExecuteHandler(service string) middleware.Handler {
+func WSExecuteHandler() middleware.Handler {
 	return func(ctx middleware.IMiddleContext) {
 		n, ok := ctx.Meta().Get("__context_")
 		if !ok {
@@ -27,9 +27,9 @@ func WSExecuteHandler(service string) middleware.Handler {
 		}
 
 		//构建处理函数
-		h := newWSHandler(conn, ctx.User().GetRequestID(), ctx.User().GetClientIP())
-		exchange.Subscribe(ctx.User().GetRequestID(), h.recvNotify(c))
-		defer exchange.Unsubscribe(ctx.User().GetRequestID())
+		h := newWSHandler(conn, ctx.User().GetTraceID(), ctx.User().GetClientIP())
+		exchange.Subscribe(ctx.User().GetTraceID(), h.recvNotify(c))
+		defer exchange.Unsubscribe(ctx.User().GetTraceID())
 
 		//异步读取与写入
 		go h.readPump()

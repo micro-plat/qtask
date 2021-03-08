@@ -2,9 +2,12 @@ package middleware
 
 import (
 	"net/http"
+
+	"github.com/micro-plat/lib4go/types"
 )
 
 var originName = "Origin"
+var hostName = "Host"
 
 //Header 响应头设置
 func Header() Handler {
@@ -19,16 +22,18 @@ func Header() Handler {
 		}
 		if len(headers) > 0 {
 			ctx.Response().AddSpecial("hdr")
+
 		}
 
-		//3. 处理响应header参数
+		//2. 处理响应header参数
 		origin := ctx.Request().Headers().GetString(originName)
-		hds := headers.GetHeaderByOrigin(origin)
+		hds := headers.GetHeaderByOrigin(types.GetString(origin, ctx.Response().GetHeaders().GetString(hostName)))
 		for k, v := range hds {
 			ctx.Response().Header(k, v)
 		}
 
-		//2. 业务处理
+		//3. 业务处理
 		ctx.Next()
+
 	}
 }

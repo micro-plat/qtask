@@ -36,6 +36,9 @@ func NewResponsive(cnf app.IAPPConf) (h *Responsive, err error) {
 		comparer: conf.NewComparer(cnf.GetServerConf(), mqc.MainConfName, mqc.SubConfName...),
 	}
 	app.Cache.Save(cnf)
+	if err := services.Def.DoSetup(cnf); err != nil {
+		return nil, err
+	}
 	h.Server, err = h.getServer(cnf)
 	return h, err
 }
@@ -72,6 +75,14 @@ func (w *Responsive) Start() (err error) {
 	})
 
 	w.log.Infof("启动成功(%s,%s,[%d])", w.conf.GetServerConf().GetServerType(), w.Server.GetAddress(), w.Server.queues.Count())
+
+	//服务启动成功后钩子
+	if err := services.Def.DoStarted(w.conf); err != nil {
+		err = fmt.Errorf("%s外部处理失败，关闭服务器 %w", w.conf.GetServerConf().GetServerType(), err)
+		w.Shutdown()
+		return err
+	}
+
 	return nil
 }
 

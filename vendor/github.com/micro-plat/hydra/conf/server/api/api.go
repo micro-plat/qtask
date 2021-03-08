@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/micro-plat/lib4go/types"
@@ -37,10 +38,10 @@ const (
 )
 
 //MainConfName 主配置中的关键配置名
-var MainConfName = []string{"address", "status", "rTimeout", "wTimeout", "rhTimeout", "dn"}
+var MainConfName = []string{"address", "status", "rTimeout", "wTimeout", "rhTimeout", "dns"}
 
 //SubConfName 子配置中的关键配置名
-var SubConfName = []string{"router", "metric"}
+var SubConfName = []string{"router", "metric", "processor"}
 var validTypes = map[string]bool{"api": true, "web": true, "ws": true}
 
 //Server api server配置信息
@@ -125,7 +126,7 @@ func GetConf(cnf conf.IServerConf) (s *Server, err error) {
 	}
 	s = &Server{}
 	_, err = cnf.GetMainObject(s)
-	if err == conf.ErrNoSetting {
+	if errors.Is(err, conf.ErrNoSetting) {
 		return nil, fmt.Errorf("/%s :%w", cnf.GetServerPath(), err)
 	}
 	if err != nil {

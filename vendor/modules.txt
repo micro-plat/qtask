@@ -104,7 +104,7 @@ github.com/mholt/archiver
 # github.com/micro-plat/gmq v1.0.1
 github.com/micro-plat/gmq/mqtt
 github.com/micro-plat/gmq/mqtt/client
-# github.com/micro-plat/hydra v1.0.5
+# github.com/micro-plat/hydra v1.1.1
 ## explicit
 github.com/micro-plat/hydra
 github.com/micro-plat/hydra/components
@@ -149,6 +149,7 @@ github.com/micro-plat/hydra/conf/server/cron
 github.com/micro-plat/hydra/conf/server/header
 github.com/micro-plat/hydra/conf/server/metric
 github.com/micro-plat/hydra/conf/server/mqc
+github.com/micro-plat/hydra/conf/server/processor
 github.com/micro-plat/hydra/conf/server/queue
 github.com/micro-plat/hydra/conf/server/render
 github.com/micro-plat/hydra/conf/server/router
@@ -196,9 +197,11 @@ github.com/micro-plat/hydra/hydra/servers/cron
 github.com/micro-plat/hydra/hydra/servers/http
 github.com/micro-plat/hydra/hydra/servers/http/ws
 github.com/micro-plat/hydra/hydra/servers/mqc
+github.com/micro-plat/hydra/hydra/servers/pkg/adapter
 github.com/micro-plat/hydra/hydra/servers/pkg/dispatcher
 github.com/micro-plat/hydra/hydra/servers/pkg/dispatcher/render
 github.com/micro-plat/hydra/hydra/servers/pkg/middleware
+github.com/micro-plat/hydra/pkgs
 github.com/micro-plat/hydra/registry
 github.com/micro-plat/hydra/registry/pub
 github.com/micro-plat/hydra/registry/registry/filesystem
@@ -210,13 +213,14 @@ github.com/micro-plat/hydra/registry/watcher
 github.com/micro-plat/hydra/registry/watcher/wchild
 github.com/micro-plat/hydra/registry/watcher/wvalue
 github.com/micro-plat/hydra/services
-# github.com/micro-plat/lib4go v1.0.10
+# github.com/micro-plat/lib4go v1.1.0
 ## explicit
 github.com/micro-plat/lib4go/concurrent/cmap
 github.com/micro-plat/lib4go/db
 github.com/micro-plat/lib4go/db/tpl
 github.com/micro-plat/lib4go/encoding
 github.com/micro-plat/lib4go/encoding/base64
+github.com/micro-plat/lib4go/envs
 github.com/micro-plat/lib4go/errs
 github.com/micro-plat/lib4go/file
 github.com/micro-plat/lib4go/jsons

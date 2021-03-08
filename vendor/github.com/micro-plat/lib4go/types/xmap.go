@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"reflect"
 	"regexp"
 	"strings"
@@ -124,6 +125,18 @@ type IXMap interface {
 	//Merge 合并多个xmap
 	Merge(m IXMap)
 
+	//Each 循环器，传入处理函数，内部循环每个数据并调用处理函数
+	Each(fn func(string, interface{}))
+
+	//Iterator 迭代处理器，传入处理函数，函数返回结果为新值，新建新的map并返回
+	Iterator(fn func(string, interface{}) interface{}) XMap
+
+	//Count 计数器，传入处理函数，函数返回值为true则为需要计数，最后返回符合条件的数量和
+	Count(fn func(string, interface{}) bool) int
+
+	//Filter 过滤器，传入过滤函数，函数返回值为true则为需要的参数装入map返回
+	Filter(fn func(string, interface{}) bool) XMap
+
 	//MergeMap 合并map[string]interface{}
 	MergeMap(anr map[string]interface{})
 
@@ -224,7 +237,7 @@ func (q XMap) Append(kv ...interface{}) {
 	if len(kv) == 0 || len(kv)%2 != 0 {
 		return
 	}
-	for i := 0; i < len(kv)/2; i++ {
+	for i := 0; i < len(kv); i = i + 2 {
 		q.SetValue(fmt.Sprint(kv[i]), kv[i+1])
 	}
 	return
@@ -308,7 +321,7 @@ func (q XMap) GetDatetime(name string, format ...string) (time.Time, error) {
 //GetStrings 获取字符串数组
 func (q XMap) GetStrings(name string, def ...string) (r []string) {
 	if v := q.GetString(name); v != "" {
-		if r = strings.Split(v, ";"); len(r) > 0 {
+		if r = strings.Split(v, ","); len(r) > 0 {
 			return r
 		}
 	}
@@ -369,8 +382,15 @@ func (q XMap) GetXMap(name string) (c XMap) {
 	if !ok {
 		return map[string]interface{}{}
 	}
-	if data, ok := v.(map[string]interface{}); ok {
-		return data
+	switch value := v.(type) {
+	case map[string]interface{}:
+		return value
+	case IXMap:
+		return value.ToMap()
+	case XMap:
+		return value
+	case map[string]string:
+		return NewXMapBySMap(value)
 	}
 	return map[string]interface{}{}
 }
@@ -431,6 +451,45 @@ func (q XMap) ToAnyStruct(out interface{}) error {
 	return Map2Struct(out, q, "json")
 }
 
+//Each 循环器，传入处理函数，内部循环每个数据并调用处理函数
+func (q XMap) Each(fn func(string, interface{})) {
+	for k, v := range q {
+		fn(k, v)
+	}
+}
+
+//Iterator 迭代处理器，传入处理函数，函数返回结果为新值，新建新的map并返回
+func (q XMap) Iterator(fn func(string, interface{}) interface{}) XMap {
+	n := NewXMap()
+	for k, v := range q {
+		nv := fn(k, v)
+		n.SetValue(k, nv)
+	}
+	return n
+}
+
+//Count 计数器，传入处理函数，函数返回值为true则为需要计数，最后返回符合条件的数量和
+func (q XMap) Count(fn func(string, interface{}) bool) int {
+	var n = 0
+	for k, v := range q {
+		if fn(k, v) {
+			n++
+		}
+	}
+	return n
+}
+
+//Filter 过滤器，传入过滤函数，函数返回值为true则为需要的参数装入map返回
+func (q XMap) Filter(fn func(string, interface{}) bool) XMap {
+	n := NewXMap()
+	for k, v := range q {
+		if fn(k, v) {
+			n.SetValue(k, v)
+		}
+	}
+	return n
+}
+
 //ToMap 转换为map[string]interface{}
 func (q XMap) ToMap() map[string]interface{} {
 	return q
@@ -458,16 +517,45 @@ func (q XMap) ToSMap() map[string]string {
 	return rmap
 }
 
-//Translate 翻译带参数的变量支持格式有 @abc,{@abc}
+//Translate 翻译带参数的变量支持格式有 @abc,{@abc},转义符@
 func (q XMap) Translate(format string) string {
-	brackets, _ := regexp.Compile(`\{@\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*\}`)
-	result := brackets.ReplaceAllStringFunc(format, func(s string) string {
+	word := regexp.MustCompile(`[\w^@]*(\{@\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*\})`)
+	result := word.ReplaceAllStringFunc(format, func(s string) string {
+		if strings.HasPrefix(s, "@{@") {
+			return s[1:]
+		}
 		return q.GetString(s[2 : len(s)-1])
 	})
-	word, _ := regexp.Compile(`@\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*`)
+	word = regexp.MustCompile(`[\w^#]*(\{#\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*\})`)
 	result = word.ReplaceAllStringFunc(result, func(s string) string {
+		if strings.HasPrefix(s, "#{#") {
+			return s[1:]
+		}
+		return url.QueryEscape(q.GetString(s[2 : len(s)-1]))
+	})
+
+	word = regexp.MustCompile(`[\w^@{}]*(@\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*)`)
+	result = word.ReplaceAllStringFunc(result, func(s string) string {
+		if strings.HasPrefix(s, "@@") {
+			return s[1:]
+		}
+		if strings.HasPrefix(s, "{@") {
+			return s
+		}
 		return q.GetString(s[1:])
 	})
+
+	word = regexp.MustCompile(`[\w^#{}]*(#\w+[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*[\.]?\w*)`)
+	result = word.ReplaceAllStringFunc(result, func(s string) string {
+		if strings.HasPrefix(s, "##") {
+			return s[1:]
+		}
+		if strings.HasPrefix(s, "{#") {
+			return s
+		}
+		return url.QueryEscape(q.GetString(s[1:]))
+	})
+
 	return result
 }
 
