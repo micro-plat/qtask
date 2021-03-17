@@ -74,8 +74,8 @@ const SQLFailedTask = `
 UPDATE tsk_system_task t SET 
 t.delete_time = DATE_ADD(NOW(),INTERVAL CASE WHEN t.delete_interval=0 THEN 604800 ELSE t.delete_interval END SECOND),
 t.status = 90
-WHERE t.max_execute_time > DATE_SUB(NOW(),INTERVAL 7 DAY)
-AND (t.max_execute_time < NOW() OR t.count >= t.max_count) 
+WHERE ((t.max_execute_time > DATE_SUB(NOW(),INTERVAL 7 DAY)
+AND t.max_execute_time < NOW()) OR t.count >= t.max_count))
 AND t.status IN (20, 30)
 LIMIT 1000
 `
