@@ -1,7 +1,17 @@
 package mysql
 
-import "github.com/micro-plat/hydra"
+import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/micro-plat/hydra"
+)
 
 func init() {
-	hydra.Installer.DB.AddSQL(tsk_system_seq, tsk_system_task)
+	//注册服务包
+	hydra.OnReadying(func() error {
+		hydra.Installer.DB.AddSQL(
+			tsk_system_task,
+			tsk_system_seq,
+		)
+		return nil
+	})
 }
