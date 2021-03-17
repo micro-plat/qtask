@@ -35,12 +35,12 @@ values
 
 const SQLProcessingTask = `
 update tsk_system_task t set 
-t.next_execute_time=date_add(now(),interval t.next_interval second),
-t.status=30,
+t.next_execute_time = date_add(now(),interval t.next_interval second),
+t.status = 32,
 t.count=t.count + 1,
-t.last_execute_time=now()
-where t.task_id=@task_id 
-and t.status in(20,30)
+t.last_execute_time = now()
+where t.task_id = @task_id 
+and t.status = 31
 and t.count < t.max_count`
 
 const SQLFinishTask = `
@@ -49,17 +49,18 @@ set t.next_execute_time = STR_TO_DATE('2099-12-31', '%Y-%m-%d'),
     t.status            = 0,
     t.delete_time       = date_add(now(),interval t.delete_interval second)
 where t.task_id = @task_id
-and t.status in (20, 30)`
+and t.status in (31, 32)`
 
 const SQLUpdateTask = `
 update tsk_system_task t set 
 t.batch_id=@batch_id,
+t.status = 31, 
 t.next_execute_time = date_add(now(),interval t.next_interval second)
 where t.max_execute_time > now() 
 and t.next_execute_time <= now() 
 and t.count < t.max_count
 and t.plat_name = @plat_name
-and t.status in(20,30)
+and t.status in(20,30,32)
 limit 1000`
 
 const SQLQueryWaitProcess = `
