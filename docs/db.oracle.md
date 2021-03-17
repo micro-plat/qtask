@@ -6,6 +6,7 @@
 | ----------------- | ------------- | :-----: | :---: | :------------------------------------------------------: | :------------------------------------------ |
 | task_id           | number(20)    |         |  否   |                          PK,SEQ                          | 编号                                        |
 | name              | varchar2(32)  |         |  否   |                                                          | 名称                                        |
+| plat_name         | varchar2(32)  |         |  否   |                                                          | 平台名称                                    |
 | create_time       | date          | sysdate |  否   |                                                          | 创建时间                                    |
 | last_execute_time | date          |         |  是   |                                                          | 上次执行时间                                |
 | next_execute_time | date          |         |  否   | IDX(QTASK_INFO_BATCH_ID,1),IDX(qtask_max_execute_time,2) | 下次执行时间                                |
@@ -28,3 +29,6 @@
 | seq_id      | number(20)   |         |  否   | PK,SEQ | 编号     |
 | name        | varchar2(32) |         |  否   |        | 名称     |
 | create_time | date         | sysdate |  否   |        | 创建时间 |
+
+
+hicli db create ./docs/db.oracle.md  ./internal/modules/const/sql/mysql --gofile --drop --cover

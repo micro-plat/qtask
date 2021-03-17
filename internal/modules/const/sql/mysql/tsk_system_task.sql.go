@@ -6,6 +6,7 @@ const tsk_system_task=`
 	CREATE TABLE IF NOT EXISTS tsk_system_task (
 		task_id bigint  not null auto_increment comment '编号' ,
 		name varchar(32)  not null  comment '名称' ,
+		plat_name varchar(32)  not null  comment '平台名称' ,
 		create_time datetime default current_timestamp not null  comment '创建时间' ,
 		last_execute_time datetime    comment '上次执行时间' ,
 		next_execute_time datetime  not null  comment '下次执行时间' ,
