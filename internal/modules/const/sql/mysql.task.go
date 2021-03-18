@@ -40,8 +40,7 @@ t.status=30,
 t.count=t.count + 1,
 t.last_execute_time=now()
 where t.task_id=@task_id 
-and t.status in(20,30)
-and t.count < t.max_count`
+and t.status in(20,30)`
 
 const SQLFinishTask = `
 update tsk_system_task t
@@ -60,7 +59,7 @@ and t.next_execute_time <= now()
 and t.count < t.max_count
 and t.plat_name = @plat_name
 and t.status in(20,30)
-limit 1000`
+limit 200`
 
 const SQLQueryWaitProcess = `
 select t.queue_name,t.msg_content content 
@@ -77,7 +76,6 @@ t.status = 90
 WHERE ((t.max_execute_time > DATE_SUB(NOW(),INTERVAL 7 DAY)
 AND t.max_execute_time < DATE_SUB(NOW(),INTERVAL 1 HOUR)) OR t.count >= t.max_count)
 AND t.status IN (20, 30)
-LIMIT 1000
 `
 
 const SQLClearSEQ = `delete from tsk_system_seq where seq_id < @seq_id`
