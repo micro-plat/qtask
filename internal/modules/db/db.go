@@ -75,6 +75,11 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 // ClearTask 清除任务
 func ClearTask(db db.IDBExecuter) error {
 
+	// 失败任务处理
+	if err := failedTasks(db, sql.SQLFailedTask); err != nil {
+		return err
+	}
+
 	rows, err := db.Execute(sql.SQLClearTask, nil)
 	if err != nil {
 		return fmt.Errorf("清理任务失败 %v", err)
@@ -126,10 +131,6 @@ func failedTasks(db db.IDBExecuter, SQLFailedTask string) error {
 // QueryTasks 查询任务
 func QueryTasks(db db.IDBExecuter) (rows db.QueryRows, err error) {
 
-	// 失败任务处理
-	if err := failedTasks(db, sql.SQLFailedTask); err != nil {
-		return nil, err
-	}
 	// 查询正在执行任务
 	_, rows, err = query(db, sql.SQLGetSEQ, sql.SQLUpdateTask, sql.SQLQueryWaitProcess)
 	if err != nil {
