@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/micro-plat/qtask"
+
 	"github.com/micro-plat/hydra"
 	"github.com/micro-plat/hydra/hydra/servers/cron"
 	"github.com/micro-plat/hydra/hydra/servers/http"
@@ -16,6 +18,7 @@ var app = hydra.NewApp(
 func main() {
 	app.Micro("/order/request", order.NewRequestHandler)
 	app.MQC("/order/pay", order.NewPayHandler)
+	qtask.BindFlow()
 
 	//检查配置是否正确
 	app.OnStarting(func(conf hydra.IAPPConf) error {

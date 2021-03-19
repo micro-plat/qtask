@@ -11,7 +11,7 @@ import (
 //Scan 扫描任务，定时从ＤＢ中扫描待处理任务并放入消息队列
 func Scan(ctx hydra.IContext) (r interface{}) {
 
-	ctx.Log().Info("---------------qtask:任务扫描----------------")
+	ctx.Log().Debug("---------------qtask:任务扫描----------------")
 	xdb, err := hydra.C.DB().GetDB(conf.DBName)
 	if err != nil {
 		return err
@@ -20,7 +20,11 @@ func Scan(ctx hydra.IContext) (r interface{}) {
 	if err != nil {
 		return err
 	}
-	ctx.Log().Info("发送任务到消息队列")
+	if len(rows) == 0 {
+		return "empty"
+	}
+
+	ctx.Log().Debug("发送任务到消息队列")
 	queue, err := hydra.C.Queue().GetQueue(conf.QueueName)
 	if err != nil {
 		return err
@@ -32,23 +36,23 @@ func Scan(ctx hydra.IContext) (r interface{}) {
 			return fmt.Errorf("发送消息(%s)到消息队列(%s)失败:%v", content, qName, err)
 		}
 	}
-	ctx.Log().Infof("处理消息:%d条", rows.Len())
+	ctx.Log().Debugf("处理消息:%d条", rows.Len())
 	return "success"
 }
 
 //Clear 清理任务，删除指定时间以前的任务
 func Clear() func(ctx hydra.IContext) (r interface{}) {
 	return func(ctx hydra.IContext) (r interface{}) {
-		ctx.Log().Infof("---------------qtask:清理任务----------------")
+		ctx.Log().Debugf("---------------qtask:清理任务----------------")
 		xdb, err := hydra.C.DB().GetDB(conf.DBName)
 		if err != nil {
 			return err
 		}
-		ctx.Log().Info("1.开始清除任务")
+		ctx.Log().Debug("1.开始清除任务")
 		if err = db.ClearTask(xdb); err != nil {
 			return err
 		}
-		ctx.Log().Info("2.完成清除任务")
+		ctx.Log().Debug("2.完成清除任务")
 		return "success"
 	}
 }
