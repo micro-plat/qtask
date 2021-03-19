@@ -16,7 +16,7 @@
 | delete_time       | date          |         |  是   |                           IDX                            | 删除期限                                    |
 | count             | number(10)    |    0    |  否   |                                                          | 执行次数                                    |
 | max_count         | number(10)    |    0    |  否   |                                                          | 最大执行次数                                |
-| order_no          | varchar2(32)  |         |  是   |                                                          | 外部业务单号                                |
+| order_no          | varchar2(32)  |         |  是   |                idx(qtask_order_no)                                          | 外部业务单号                                |
 | status            | number(2)     |         |  否   |                                                          | 状态(20 等待，30 正在,0 已处理,90 处理失败) |
 | batch_id          | number(20)    |         |  是   |                IDX(QTASK_INFO_BATCH_ID,2)                | 执行批次号                                  |
 | queue_name        | varchar2(64)  |         |  否   |                                                          | 消息队列                                    |

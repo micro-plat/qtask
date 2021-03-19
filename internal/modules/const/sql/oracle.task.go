@@ -48,6 +48,16 @@ and t.count < t.max_count
 and t.status in(20,30)
 `
 
+const SQLQueryTaskForInsert = `
+select t.task_id from tsk_system_task t 
+where t.name = @name
+and t.plat_name = @plat_name
+and t.order_no = @order_no
+and t.queue_name = @queue_name
+and t.status in(20,30)
+and rownum <= 1
+`
+
 const SQLFinishTask = `
 update tsk_system_task t
 set t.next_execute_time = to_date('2099-12-31', '%yyyy-%mm-%dd'),

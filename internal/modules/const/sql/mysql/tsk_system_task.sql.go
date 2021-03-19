@@ -24,4 +24,5 @@ const tsk_system_task=`
 		,primary key (task_id)
 		,index qtask_info_batch_id(next_execute_time,batch_id)
 		,index qtask_max_execute_time(max_execute_time)
+		,index qtask_order_no(order_no)
 	) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='任务表'`

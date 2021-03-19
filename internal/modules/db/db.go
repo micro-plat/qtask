@@ -2,6 +2,8 @@ package db
 
 import (
 	"fmt"
+	"net/http"
+	"os"
 
 	"github.com/micro-plat/lib4go/db"
 	"github.com/micro-plat/lib4go/errs"
@@ -64,6 +66,16 @@ func SaveTask(db db.IDBExecuter, name string, input map[string]interface{}, time
 	imap["max_count"] = types.DecodeInt(imap["max_count"], nil, 100, imap["max_count"])
 	imap["queue_name"] = mq
 	imap["plat_name"] = conf.GetPlatName()
+
+	//增加重复检查，当相同信息的数据存在，且状态为20,30时，则不再添加新数据
+	v, err := db.Scalar(sql.SQLQueryTaskForInsert, imap)
+	if err != nil {
+		return 0, fmt.Errorf("创建任务(%s)失败 %v", name, err)
+	}
+	if taskid := types.GetInt64(v); taskid > 0 {
+		return taskid, errs.NewError(http.StatusNoContent, os.ErrExist)
+	}
+
 	//保存任务信息
 	row, err := db.Execute(sql.SQLCreateTask, imap)
 	if err != nil || row != 1 {
