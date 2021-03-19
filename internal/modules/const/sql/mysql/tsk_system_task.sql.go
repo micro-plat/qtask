@@ -21,8 +21,8 @@ const tsk_system_task=`
 		batch_id bigint    comment '执行批次号' ,
 		queue_name varchar(64)  not null  comment '消息队列' ,
 		msg_content varchar(256)    comment '消息内容' 
-		,primary key (task_id)
-		,index qtask_info_batch_id(next_execute_time,batch_id)
 		,index qtask_max_execute_time(max_execute_time)
 		,index qtask_order_no(order_no)
+		,primary key (task_id)
+		,index qtask_info_batch_id(next_execute_time,batch_id)
 	) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='任务表'`
