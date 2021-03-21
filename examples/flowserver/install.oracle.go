@@ -3,11 +3,11 @@
 package main
 
 import (
+	_ "github.com/mattn/go-oci8"
 	"github.com/micro-plat/hydra"
 	"github.com/micro-plat/hydra/conf/server/mqc"
 	"github.com/micro-plat/hydra/conf/server/queue"
 	"github.com/micro-plat/hydra/conf/vars/queue/queueredis"
-	_ "github.com/zkfy/go-oci8"
 )
 
 func init() {

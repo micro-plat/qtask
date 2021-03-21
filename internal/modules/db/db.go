@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/micro-plat/lib4go/db"
-	"github.com/micro-plat/lib4go/errs"
+	//"github.com/micro-plat/lib4go/errs"
 	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
@@ -92,12 +92,9 @@ func ClearTask(db db.IDBExecuter) error {
 		return err
 	}
 
-	rows, err := db.Execute(sql.SQLClearTask, nil)
+	_, err := db.Execute(sql.SQLClearTask, nil)
 	if err != nil {
 		return fmt.Errorf("清理任务失败 %v", err)
-	}
-	if rows == 0 {
-		return errs.NewError(204, "无需清理")
 	}
 	return nil
 }
@@ -122,7 +119,7 @@ func query(db db.IDBExecuter, SQLGetBatch string, SQLUpdateTask string, SQLQuery
 		return 0, nil, fmt.Errorf("修改任务批次失败 %v", err)
 	}
 	if row == 0 {
-		return 0, nil, errs.NewError(204, "未查询到待处理任务")
+		return 0, nil, nil
 	}
 	rows, err = db.Query(SQLQueryWaitProcess, imap)
 	if err != nil {
