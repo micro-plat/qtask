@@ -61,8 +61,6 @@ github.com/go-redis/redis/internal/util
 # github.com/go-sql-driver/mysql v1.4.1
 ## explicit
 github.com/go-sql-driver/mysql
-# github.com/golang/mock v1.4.3
-## explicit
 # github.com/golang/protobuf v1.4.3
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes
@@ -75,8 +73,7 @@ github.com/golang/snappy
 github.com/google/uuid
 # github.com/gorilla/websocket v1.4.2
 github.com/gorilla/websocket
-# github.com/json-iterator/go v1.1.10
-## explicit
+# github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
 # github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
 github.com/juju/ansiterm
@@ -99,12 +96,15 @@ github.com/manifoldco/promptui/screenbuf
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
+# github.com/mattn/go-oci8 v0.1.1
+## explicit
+github.com/mattn/go-oci8
 # github.com/mholt/archiver v3.1.1+incompatible
 github.com/mholt/archiver
 # github.com/micro-plat/gmq v1.0.1
 github.com/micro-plat/gmq/mqtt
 github.com/micro-plat/gmq/mqtt/client
-# github.com/micro-plat/hydra v1.1.1
+# github.com/micro-plat/hydra v1.1.2
 ## explicit
 github.com/micro-plat/hydra
 github.com/micro-plat/hydra/components
@@ -213,7 +213,7 @@ github.com/micro-plat/hydra/registry/watcher
 github.com/micro-plat/hydra/registry/watcher/wchild
 github.com/micro-plat/hydra/registry/watcher/wvalue
 github.com/micro-plat/hydra/services
-# github.com/micro-plat/lib4go v1.1.0
+# github.com/micro-plat/lib4go v1.1.2
 ## explicit
 github.com/micro-plat/lib4go/concurrent/cmap
 github.com/micro-plat/lib4go/db
@@ -240,11 +240,9 @@ github.com/micro-plat/lib4go/tgo
 github.com/micro-plat/lib4go/types
 github.com/micro-plat/lib4go/utility
 github.com/micro-plat/lib4go/zk
-# github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
-## explicit
+# github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421
 github.com/modern-go/concurrent
-# github.com/modern-go/reflect2 v1.0.1
-## explicit
+# github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742
 github.com/modern-go/reflect2
 # github.com/nwaples/rardecode v1.1.0
 github.com/nwaples/rardecode
@@ -281,9 +279,6 @@ github.com/yosssi/gmq/mqtt
 github.com/yosssi/gmq/mqtt/packet
 # github.com/zkfy/go-metrics v0.0.0-20161128210544-1f30fe9094a5
 github.com/zkfy/go-metrics
-# github.com/zkfy/go-oci8 v1.0.0
-## explicit
-github.com/zkfy/go-oci8
 # github.com/zkfy/jwt-go v3.0.0+incompatible
 github.com/zkfy/jwt-go
 # github.com/zkfy/log v0.0.0-20180312054228-b2704c3ef896

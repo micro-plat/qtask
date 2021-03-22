@@ -6,7 +6,8 @@ import (
 	"os"
 
 	"github.com/micro-plat/lib4go/db"
-	//"github.com/micro-plat/lib4go/errs"
+	"github.com/micro-plat/lib4go/errs"
+
 	"github.com/micro-plat/lib4go/jsons"
 	"github.com/micro-plat/lib4go/types"
 	"github.com/micro-plat/qtask/internal/modules/const/conf"
