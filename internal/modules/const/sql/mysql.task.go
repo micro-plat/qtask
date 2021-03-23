@@ -86,6 +86,7 @@ t.status = 90
 WHERE ((t.max_execute_time > DATE_SUB(NOW(),INTERVAL 7 DAY)
 AND t.max_execute_time < DATE_SUB(NOW(),INTERVAL 1 HOUR)) OR t.count >= t.max_count)
 AND t.status IN (20, 30)
+limit 200
 `
 
 const SQLClearSEQ = `delete from tsk_system_seq where seq_id < @seq_id`

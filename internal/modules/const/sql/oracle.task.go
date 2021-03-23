@@ -44,7 +44,6 @@ t.status=30,
 t.count=t.count + 1,
 t.last_execute_time=sysdate
 where  t.task_id=@task_id 
-and t.count < t.max_count
 and t.status in(20,30)
 `
 
@@ -75,7 +74,7 @@ and t.next_execute_time <= sysdate
 and t.status in(20,30) 
 and t.plat_name = @plat_name
 and t.count < t.max_count
-and rownum <= 1000`
+and rownum <= 200`
 
 const SQLQueryWaitProcess = `
 select queue_name,msg_content content 
@@ -83,7 +82,6 @@ from
 tsk_system_task t 
 where t.batch_id=@batch_id
 and t.next_execute_time > sysdate
-and t.count < t.max_count
 `
 
 const SQLClearTask = `delete from tsk_system_task where delete_time < sysdate and status in (0, 90)`
@@ -95,5 +93,5 @@ t.status = 90
 where ((t.max_execute_time > sysdate - 7
 and t.max_execute_time < sysdate) or t.count >= t.max_count))
 and t.status in (20, 30)
-and rownum <= 1000
+and rownum <= 200
 `
