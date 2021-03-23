@@ -20,7 +20,7 @@ func Scan(ctx hydra.IContext) (r interface{}) {
 	if err != nil {
 		return err
 	}
-	if len(rows) == 0 {
+	if rows.Len() == 0 {
 		return "empty"
 	}
 
@@ -29,7 +29,7 @@ func Scan(ctx hydra.IContext) (r interface{}) {
 	if err != nil {
 		return err
 	}
-	for _, row := range rows {
+	for _, row := range rows.Maps() {
 		qName := row.GetString("queue_name")
 		content := row.GetString("content")
 		if err := queue.Send(qName, content); err != nil {
