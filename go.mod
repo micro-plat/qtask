@@ -9,4 +9,3 @@ require (
 	github.com/micro-plat/lib4go v1.1.2
 	google.golang.org/appengine v1.6.5 // indirect
 )
-replace github.com/micro-plat/lib4go => ../../../github.com/micro-plat/lib4go
