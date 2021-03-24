@@ -29,7 +29,7 @@ func Scan(ctx hydra.IContext) (r interface{}) {
 	if err != nil {
 		return err
 	}
-	for _, row := range rows.Maps() {
+	for _, row := range rows {
 		qName := row.GetString("queue_name")
 		content := row.GetString("content")
 		if err := queue.Send(qName, content); err != nil {
