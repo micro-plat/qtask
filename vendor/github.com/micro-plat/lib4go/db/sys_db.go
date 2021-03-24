@@ -138,7 +138,7 @@ func resolveRows(rows *sql.Rows, col int) (dataRows QueryRows, columns []string,
 			} else {
 				//	buff := value.(*[]byte)
 				//row[key] = bytes.NewBuffer(*buff).String()
-				row.SetValue(key, strings.TrimPrefix(fmt.Sprintf("%s", value), "&"))
+				row[key] = strings.TrimPrefix(fmt.Sprintf("%s", value), "&")
 			}
 		}
 	}
