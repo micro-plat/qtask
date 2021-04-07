@@ -91,7 +91,7 @@ update tsk_system_task t set
 t.delete_time = sysdate + decode(t.delete_interval, 0, 604800, t.delete_interval) / 24 / 60 / 60,
 t.status = 90
 where ((t.max_execute_time > sysdate - 7
-and t.max_execute_time < sysdate) or t.count >= t.max_count))
+and t.max_execute_time < sysdate) or t.count >= t.max_count)
 and t.status in (20, 30)
 and rownum <= 200
 `
